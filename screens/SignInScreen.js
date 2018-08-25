@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 
 export default class SignInScreen extends React.Component {
@@ -41,6 +41,10 @@ export default class SignInScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                {/* <Image
+                    style={{width: 150, height: 150}}
+                    source={require('../assets/images/logo_field.png')}
+                /> */}
                 <Card>
                     <FormInput placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } />
                     {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
@@ -50,7 +54,7 @@ export default class SignInScreen extends React.Component {
                     <Button buttonStyle={styles.signUpButton} fontWeight='bold' title='Register' onPress={() => this.props.navigation.navigate('SignUp') }/> 
                 </Card>
 
-                {/* <View>
+                 {/* <View>
                     <Text style={{textDecorationLine: 'underline'}}>Terms</Text>
                     <Text style={{textDecorationLine: 'underline'}}>Privacy</Text>
                 </View> */}
@@ -63,7 +67,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'space-around'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     formInput: {
         paddingLeft: 5
