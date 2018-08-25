@@ -41,23 +41,21 @@ export default class SignInScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                {/* <Image
-                    style={{width: 150, height: 150}}
+                <Image
+                    style={styles.logo}
                     source={require('../assets/images/logo_field.png')}
-                /> */}
-                <Card>
+                />
+                <View>
                     <FormInput placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } />
                     {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
                     <FormInput secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} />
                     {!this.state.hasPass ? <FormValidationMessage>{'Password is required'}</FormValidationMessage> : null } 
                     <Button onPress={this._doSignIn}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Sign In' />
                     <Button buttonStyle={styles.signUpButton} fontWeight='bold' title='Register' onPress={() => this.props.navigation.navigate('SignUp') }/> 
-                </Card>
-
-                 {/* <View>
-                    <Text style={{textDecorationLine: 'underline'}}>Terms</Text>
-                    <Text style={{textDecorationLine: 'underline'}}>Privacy</Text>
-                </View> */}
+                </View>
+                <View>
+                    <Text style={styles.forgotPassBtn}>Forgot your password?</Text>
+                </View>
             </View>
         );
     }
@@ -67,7 +65,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center'
     },
     formInput: {
@@ -80,5 +77,14 @@ const styles = StyleSheet.create({
     signUpButton: {
         marginTop: 10,
         backgroundColor: '#052c52'
+    },
+    logo: {
+        width: 150, 
+        height: 150, 
+        marginTop: 10
+    },
+    forgotPassBtn: {
+        textDecorationLine: 'underline', 
+        marginTop: 10
     }
 });
