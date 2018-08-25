@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 
 export default class SignInScreen extends React.Component {
@@ -21,24 +21,39 @@ export default class SignInScreen extends React.Component {
                 hasEmail: false
             })
         } 
+        else {
+            this.setState({
+                hasEmail: true
+            });
+        }
         if(this.state.password == '') {
             this.setState({
-                hasEmail: false
+                hasPass: false
             })
         }   
+        else {
+            this.setState({
+                hasPass: true
+            });
+        }
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <Card>
-                    <FormInput placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({email}); console.log(this.state.email); } } />
+                    <FormInput placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } />
                     {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
                     <FormInput secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} />
                     {!this.state.hasPass ? <FormValidationMessage>{'Password is required'}</FormValidationMessage> : null } 
                     <Button onPress={this._doSignIn}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Sign In' />
-                    <Button buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Sign Up' onPress={() => this.props.navigation.navigate('SignUp') }/> 
+                    <Button buttonStyle={styles.signUpButton} fontWeight='bold' title='Register' onPress={() => this.props.navigation.navigate('SignUp') }/> 
                 </Card>
+
+                {/* <View>
+                    <Text style={{textDecorationLine: 'underline'}}>Terms</Text>
+                    <Text style={{textDecorationLine: 'underline'}}>Privacy</Text>
+                </View> */}
             </View>
         );
     }
@@ -56,5 +71,9 @@ const styles = StyleSheet.create({
     button: {
         marginTop: 10,
         backgroundColor: '#efb225'
+    },
+    signUpButton: {
+        marginTop: 10,
+        backgroundColor: '#052c52'
     }
 });
