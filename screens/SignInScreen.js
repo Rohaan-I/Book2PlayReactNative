@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, Alert } from 'react-native';
+import { View, StyleSheet, Text, Image, Alert, ActivityIndicator } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 
 import Auth from '../services/Auth';
@@ -14,42 +14,68 @@ export default class SignInScreen extends React.Component {
             email: '',
             password: '',
             hasEmail: true,
-            hasPass: true
+            hasPass: true,
+            loading: false
         };
 
         this._auth = new Auth();
     }
 
     _doSignIn = async () => {
-        if(this.state.email == '') {
-            this.setState({
-                hasEmail: false
-            })
-        } 
-        else {
-            this.setState({
-                hasEmail: true
-            });
-        }
-        if(this.state.password == '') {
-            this.setState({
-                hasPass: false
-            })
-        }   
-        else {
-            this.setState({
-                hasPass: true
-            });
-        }
-
+        
         try {
-            
+            if(this.state.email == '') {
+                this.setState({
+                    hasEmail: false
+                })
+            } 
+            else {
+                this.setState({
+                    hasEmail: true
+                });
+            }
+            if(this.state.password == '') {
+                this.setState({
+                    hasPass: false
+                })
+            }   
+            else {
+                this.setState({
+                    hasPass: true
+                });
+            }
+
             if(this.state.email && this.state.password) {
+
+                this.setState({
+                    loading: true
+                });
+
                 let response = await this._auth.signInUser(this.state.email, this.state.password);
                 console.log(response);
+
+                this.setState({
+                    loading: false
+                });
+
+                if(!response.success) {
+                    Alert.alert(
+                        'Error',
+                        response.message,
+                        [
+                          {text: 'OK'}
+                        ],
+                        { cancelable: false }
+                      );
+                }
             }
         }
         catch(err) {
+
+            this.setState({
+                loading: false
+            });
+
             console.log(err);
             Alert.alert(
                 'Error',
@@ -58,7 +84,7 @@ export default class SignInScreen extends React.Component {
                   {text: 'OK'}
                 ],
                 { cancelable: false }
-              )
+              );
         }
     }
 
@@ -84,6 +110,14 @@ export default class SignInScreen extends React.Component {
                 <View>
                     <Text style={styles.forgotPassBtn} onPress={this._goToForgotPassScreen}>Forgot your password?</Text>
                 </View>
+                { this.state.loading ?
+                    
+                    <View style={{marginTop: 20}}>
+                        <ActivityIndicator size="large" color="#052c52" />
+                        <Text> Signing In... </Text>
+                    </View>  
+
+                : null}
             </View>
         );
     }
