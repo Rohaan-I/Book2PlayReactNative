@@ -17,7 +17,7 @@ export default AuthStack = createStackNavigator({
     SignUp: {
         screen: SignUpScreen,
         navigationOptions: {
-            title: 'Sign Up'
+            title: 'Register'
         }
     },
     ForgotPassword: {
