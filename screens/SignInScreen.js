@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 
 import Auth from '../services/Auth';
@@ -47,11 +47,12 @@ export default class SignInScreen extends React.Component {
 
             if(this.state.email && this.state.password) {
 
+                Keyboard.dismiss();
                 this.setState({
                     loading: true
                 });
 
-                let response = await this._auth.signInUser(this.state.email, this.state.password);
+                let response = await this._auth.signInUser(this.state.email.trim(), this.state.password.trim());
                 console.log(response);
 
                 this.setState({
@@ -68,10 +69,13 @@ export default class SignInScreen extends React.Component {
                         { cancelable: false }
                       );
                 }
+                else {
+                    // storing user role and login flag in async storage.
+                }
             }
         }
         catch(err) {
-
+            Keyboard.dismiss();
             this.setState({
                 loading: false
             });
@@ -112,9 +116,8 @@ export default class SignInScreen extends React.Component {
                 </View>
                 { this.state.loading ?
                     
-                    <View style={{marginTop: 20}}>
+                    <View pointerEvents='none' style={styles.loading}>
                         <ActivityIndicator size="large" color="#052c52" />
-                        <Text> Signing In... </Text>
                     </View>  
 
                 : null}
@@ -143,10 +146,21 @@ const styles = StyleSheet.create({
     logo: {
         width: 150, 
         height: 150, 
-        marginTop: 10
+        marginTop: 10,
+        resizeMode:'contain'
     },
     forgotPassBtn: {
         textDecorationLine: 'underline', 
         marginTop: 20
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f5fcff88'
     }
 });
