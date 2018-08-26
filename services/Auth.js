@@ -53,4 +53,26 @@ export default class Auth extends Base {
             throw new Error(err);
         }
     }
+
+    async sendForgetPassEmail() {
+        try {
+            
+            // let response = await fetch(this._signUpUrl, {
+            //     method: 'POST',
+            //     headers: {
+            //         Accept: 'application/json',
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(reqObject),
+            // });
+
+            // let responseJSON = response.json();
+            // return responseJSON;
+
+            return {success: true};
+        }
+        catch(err) {
+            throw new Error(err);
+        }
+    }
 }
