@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text, Image, Alert } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
+
+import Auth from '../services/Auth';
 
 export default class SignInScreen extends React.Component {
 
+    _auth = null;
     constructor(props) {
         super(props);
 
@@ -13,9 +16,11 @@ export default class SignInScreen extends React.Component {
             hasEmail: true,
             hasPass: true
         };
+
+        this._auth = new Auth();
     }
 
-    _doSignIn = () => {
+    _doSignIn = async () => {
         if(this.state.email == '') {
             this.setState({
                 hasEmail: false
@@ -36,6 +41,29 @@ export default class SignInScreen extends React.Component {
                 hasPass: true
             });
         }
+
+        try {
+            
+            if(this.state.email && this.state.password) {
+                let response = await this._auth.signInUser(this.state.email, this.state.password);
+                console.log(response);
+            }
+        }
+        catch(err) {
+            console.log(err);
+            Alert.alert(
+                'Error',
+                'An error ocurred.',
+                [
+                  {text: 'OK'}
+                ],
+                { cancelable: false }
+              )
+        }
+    }
+
+    _goToForgotPassScreen = () => {
+        this.props.navigation.navigate('ForgotPassword');
     }
 
     render() {
@@ -46,15 +74,15 @@ export default class SignInScreen extends React.Component {
                     source={require('../assets/images/logo_field.png')}
                 />
                 <View>
-                    <FormInput placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } />
+                    <FormInput autoCapitalize='none' placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } />
                     {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
-                    <FormInput secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} />
+                    <FormInput autoCapitalize='none' secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} />
                     {!this.state.hasPass ? <FormValidationMessage>{'Password is required'}</FormValidationMessage> : null } 
                     <Button onPress={this._doSignIn}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Sign In' />
                     <Button buttonStyle={styles.signUpButton} fontWeight='bold' title='Register' onPress={() => this.props.navigation.navigate('SignUp') }/> 
                 </View>
                 <View>
-                    <Text style={styles.forgotPassBtn}>Forgot your password?</Text>
+                    <Text style={styles.forgotPassBtn} onPress={this._goToForgotPassScreen}>Forgot your password?</Text>
                 </View>
             </View>
         );
@@ -85,6 +113,6 @@ const styles = StyleSheet.create({
     },
     forgotPassBtn: {
         textDecorationLine: 'underline', 
-        marginTop: 10
+        marginTop: 20
     }
 });
