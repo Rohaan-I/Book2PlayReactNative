@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView, AsyncStorage, KeyboardAvoidingView } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 
 import Auth from '../services/Auth';
@@ -27,6 +27,7 @@ export default class SignUpScreen extends React.Component {
             hasCountry: true,
             hasPhone: true,
             loading: false,
+            screenLoading: false,
             cities: [],
             countries: []
         };
@@ -46,7 +47,7 @@ export default class SignUpScreen extends React.Component {
         // } 
         // else {
             this.setState({
-                loading: true
+                screenLoading: true
             });
     
             this._auth.getCities()
@@ -73,14 +74,14 @@ export default class SignUpScreen extends React.Component {
                 //AsyncStorage.setItem('countries', countries);
     
                 this.setState({
-                    loading: false
+                    screenLoading: false
                 });
                 
             })
             .catch(err => {
                 console.log(err);
                 this.setState({
-                    loading: false
+                    screenLoading: false
                 });     
                 Alert.alert(
                     'Error',
@@ -266,64 +267,73 @@ export default class SignUpScreen extends React.Component {
 
     render() {            
         return (
-            <ScrollView contentContainerStyle={styles.contentContainer}>
-                <View style={styles.container}>
-                    <Image
-                        style={styles.logo}
-                        source={require('../assets/images/logo_field.png')}
-                    />
-                    <View>
-                        <FormInput autoCapitalize='none' placeholder='Full Name*' inputStyle={styles.formInput} onChangeText={(fullName) => {this.setState({ fullName });} } />
-                        {!this.state.hasFullName ? <FormValidationMessage>{'Full Name is required'}</FormValidationMessage> : null } 
-                        <FormInput autoCapitalize='none' placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } />
-                        {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
-                        <FormInput autoCapitalize='none' secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} />
-                        {!this.state.hasPass ? <FormValidationMessage>{'Password is required'}</FormValidationMessage> : null } 
-                        <FormInput autoCapitalize='none' placeholder='Street Address*' inputStyle={styles.formInput} onChangeText={(streetAddress) => {this.setState({ streetAddress });} } />
-                        {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
-                        <FormInput autoCapitalize='none' placeholder='P.O. Box' inputStyle={styles.formInput} onChangeText={(poBox) => {this.setState({ poBox });} } />
-                        
-                        <Picker
-                            selectedValue={this.state.city}
-                            style={styles.picker}
-                            onValueChange={(itemValue, itemIndex) => this.setState({city: itemValue})}>
-                            {this.state.cities.map(city => <Picker.Item key={city._id} label={city.city} value={city._id} /> )}
-                        </Picker>
-                        <Picker
-                            selectedValue={this.state.country}
-                            style={styles.picker}
-                            onValueChange={(itemValue, itemIndex) => this.setState({country: itemValue})}>
-                            {this.state.countries.map(country => <Picker.Item key={country._id} label={country.country} value={country._id} /> )}
-                        </Picker>
-                        
-                        <FormInput autoCapitalize='none' placeholder='Phone/Mobile*' inputStyle={styles.formInput} onChangeText={(phone) => {this.setState({ phone });} } />
-                        {!this.state.hasPhone ? <FormValidationMessage>{'Phone/Mobile is required'}</FormValidationMessage> : null } 
-                        
-                        <Picker
-                            selectedValue={this.state.userRole}
-                            style={styles.picker}
-                            onValueChange={(itemValue, itemIndex) => this.setState({userRole: itemValue})}>
-                            <Picker.Item label="List my field" value="1" />
-                            <Picker.Item label="Reserve a field" value="2" />
-                        </Picker>
+            <View>
+                <ScrollView contentContainerStyle={styles.contentContainer}>
+                    <View style={styles.container}>
+                        <Image
+                            style={styles.logo}
+                            source={require('../assets/images/logo_field.png')}
+                        />
+                        <View>
+                            <FormInput autoCapitalize='none' placeholder='Full Name*' inputStyle={styles.formInput} onChangeText={(fullName) => {this.setState({ fullName });} } />
+                            {!this.state.hasFullName ? <FormValidationMessage>{'Full Name is required'}</FormValidationMessage> : null } 
+                            <FormInput autoCapitalize='none' placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } />
+                            {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
+                            <FormInput autoCapitalize='none' secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} />
+                            {!this.state.hasPass ? <FormValidationMessage>{'Password is required'}</FormValidationMessage> : null } 
+                            <FormInput autoCapitalize='none' placeholder='Street Address*' inputStyle={styles.formInput} onChangeText={(streetAddress) => {this.setState({ streetAddress });} } />
+                            {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
+                            <FormInput autoCapitalize='none' placeholder='P.O. Box' inputStyle={styles.formInput} onChangeText={(poBox) => {this.setState({ poBox });} } />
+                            
+                            <Picker
+                                selectedValue={this.state.city}
+                                style={styles.picker}
+                                onValueChange={(itemValue, itemIndex) => this.setState({city: itemValue})}>
+                                {this.state.cities.map(city => <Picker.Item key={city._id} label={city.city} value={city._id} /> )}
+                            </Picker>
+                            <Picker
+                                selectedValue={this.state.country}
+                                style={styles.picker}
+                                onValueChange={(itemValue, itemIndex) => this.setState({country: itemValue})}>
+                                {this.state.countries.map(country => <Picker.Item key={country._id} label={country.country} value={country._id} /> )}
+                            </Picker>
+                            
+                            <FormInput autoCapitalize='none' placeholder='Phone/Mobile*' inputStyle={styles.formInput} onChangeText={(phone) => {this.setState({ phone });} } />
+                            {!this.state.hasPhone ? <FormValidationMessage>{'Phone/Mobile is required'}</FormValidationMessage> : null } 
+                            
+                            <Picker
+                                selectedValue={this.state.userRole}
+                                style={styles.picker}
+                                onValueChange={(itemValue, itemIndex) => this.setState({userRole: itemValue})}>
+                                <Picker.Item label="List my field" value="1" />
+                                <Picker.Item label="Reserve a field" value="2" />
+                            </Picker>
 
-                        <Button onPress={this._doSignUp}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Create An Account' />
-                        <Button buttonStyle={styles.signInButton} fontWeight='bold' title='Sign In' onPress={() => this.props.navigation.navigate('SignIn') }/> 
+                            <Button onPress={this._doSignUp}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Create An Account' />
+                            <Button buttonStyle={styles.signInButton} fontWeight='bold' title='Sign In' onPress={() => this.props.navigation.navigate('SignIn') }/> 
+                            
+                            <Text style={styles.terms}>By creating an account, you accept and agree to our <Text style={{textDecorationLine: 'underline'}} onPress={this._goToTermsScreen}>Terms of Use</Text></Text>
+                        </View>
+                        { this.state.loading ?
+                            
+                            <View pointerEvents='none' style={styles.loading}>
+                                <ActivityIndicator size="large" color="#052c52" />
+                            </View>  
+
+                        : null}
+
                         
-                        <Text style={styles.terms}>By creating an account, you accept and agree to our <Text style={{textDecorationLine: 'underline'}} onPress={this._goToTermsScreen}>Terms of Use</Text></Text>
                     </View>
-                    { this.state.loading ?
-                        
-                        <View pointerEvents='none' style={styles.loading}>
-                            <ActivityIndicator size="large" color="#052c52" />
-                        </View>  
-
-                    : null}
-
                     
-                </View>
-                
-            </ScrollView>
+                </ScrollView>
+                { this.state.screenLoading ?
+                    
+                    <View pointerEvents='none' style={styles.screenLoading}>
+                        <ActivityIndicator size="large" color="#052c52" />
+                    </View>  
+
+                : null}
+            </View>
         );
     }
 }
@@ -360,6 +370,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#f5fcff88'
+    },
+    screenLoading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#ffffff'
     },
     terms: { 
         marginLeft: 15, 
