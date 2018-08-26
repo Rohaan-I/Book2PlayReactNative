@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView, AsyncStorage, KeyboardAvoidingView } from 'react-native';
+import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 
 import Auth from '../services/Auth';
