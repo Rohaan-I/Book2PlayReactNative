@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView, AsyncStorage } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 
 import Auth from '../services/Auth';
@@ -26,10 +26,73 @@ export default class SignUpScreen extends React.Component {
             hasCity: true,
             hasCountry: true,
             hasPhone: true,
-            loading: false
+            loading: false,
+            cities: [],
+            countries: []
         };
 
         this._auth = new Auth();
+    }
+
+    componentDidMount() {
+
+        // if(AsyncStorage.getItem('cities') && AsyncStorage.getItem('countries')) {
+        //     this.setState({
+        //         cities: AsyncStorage.getItem('cities')
+        //     });
+        //     this.setState({
+        //         countries: AsyncStorage.getItem('countries')
+        //     });
+        // } 
+        // else {
+            this.setState({
+                loading: true
+            });
+    
+            this._auth.getCities()
+            .then(cities => {
+                this.setState({
+                    cities: cities
+                });
+                this.setState({
+                    city: cities[0]._id
+                });
+    
+                //AsyncStorage.setItem('cities', cities);
+                
+                return this._auth.getCountries();
+            })
+            .then(countries => {
+                this.setState({
+                    countries: countries
+                });
+                this.setState({
+                    country: countries[0]._id
+                });
+                
+                //AsyncStorage.setItem('countries', countries);
+    
+                this.setState({
+                    loading: false
+                });
+                
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({
+                    loading: false
+                });     
+                Alert.alert(
+                    'Error',
+                    'An error ocurred.',
+                    [
+                    {text: 'OK'}
+                    ],
+                    { cancelable: false }
+                );
+            });
+        // }
+        
     }
 
     _doSignUp = async () => {
@@ -220,24 +283,25 @@ export default class SignUpScreen extends React.Component {
                         {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
                         <FormInput autoCapitalize='none' placeholder='P.O. Box' inputStyle={styles.formInput} onChangeText={(poBox) => {this.setState({ poBox });} } />
                         
-                        <FormInput autoCapitalize='none' placeholder='City*' inputStyle={styles.formInput} onChangeText={(city) => {this.setState({ city });} } />
-                        {/* <Picker
+                        <Picker
                             selectedValue={this.state.city}
-                            style={styles.userRole}
+                            style={styles.picker}
                             onValueChange={(itemValue, itemIndex) => this.setState({city: itemValue})}>
-                            <Picker.Item label="List my field" value="1" />
-                            <Picker.Item label="Reserve a field" value="2" />
-                        </Picker> */}
-                        {!this.state.hasCity ? <FormValidationMessage>{'City is required'}</FormValidationMessage> : null } 
+                            {this.state.cities.map(city => <Picker.Item key={city._id} label={city.city} value={city._id} /> )}
+                        </Picker>
+                        <Picker
+                            selectedValue={this.state.country}
+                            style={styles.picker}
+                            onValueChange={(itemValue, itemIndex) => this.setState({country: itemValue})}>
+                            {this.state.countries.map(country => <Picker.Item key={country._id} label={country.country} value={country._id} /> )}
+                        </Picker>
                         
-                        <FormInput autoCapitalize='none' placeholder='Country*' inputStyle={styles.formInput} onChangeText={(country) => {this.setState({ country });} } />
-                        {!this.state.hasCountry ? <FormValidationMessage>{'Country is required'}</FormValidationMessage> : null } 
                         <FormInput autoCapitalize='none' placeholder='Phone/Mobile*' inputStyle={styles.formInput} onChangeText={(phone) => {this.setState({ phone });} } />
                         {!this.state.hasPhone ? <FormValidationMessage>{'Phone/Mobile is required'}</FormValidationMessage> : null } 
                         
                         <Picker
                             selectedValue={this.state.userRole}
-                            style={styles.userRole}
+                            style={styles.picker}
                             onValueChange={(itemValue, itemIndex) => this.setState({userRole: itemValue})}>
                             <Picker.Item label="List my field" value="1" />
                             <Picker.Item label="Reserve a field" value="2" />
@@ -248,7 +312,6 @@ export default class SignUpScreen extends React.Component {
                         
                         <Text style={styles.terms}>By creating an account, you accept and agree to our <Text style={{textDecorationLine: 'underline'}} onPress={this._goToTermsScreen}>Terms of Use</Text></Text>
                     </View>
-                    
                     { this.state.loading ?
                         
                         <View pointerEvents='none' style={styles.loading}>
@@ -256,7 +319,10 @@ export default class SignUpScreen extends React.Component {
                         </View>  
 
                     : null}
+
+                    
                 </View>
+                
             </ScrollView>
         );
     }
@@ -302,7 +368,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         paddingVertical: 20
     },
-    userRole: { 
+    picker: { 
         width: 350, 
         marginLeft: 10 
     }
