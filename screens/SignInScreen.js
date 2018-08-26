@@ -96,6 +96,14 @@ export default class SignInScreen extends React.Component {
         this.props.navigation.navigate('ForgotPassword');
     }
 
+    _goToTermsScreen = () => {
+        this.props.navigation.navigate('Terms');
+    }
+
+    _goToPrivacyScreen = () => {
+        this.props.navigation.navigate('Privacy');
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -113,6 +121,11 @@ export default class SignInScreen extends React.Component {
                 </View>
                 <View>
                     <Text style={styles.forgotPassBtn} onPress={this._goToForgotPassScreen}>Forgot your password?</Text>
+                </View>
+                
+                <View style={styles.policy}>
+                    <Text style={styles.termsBtn} onPress={this._goToTermsScreen}>Terms</Text>
+                    <Text style={styles.privacyBtn} onPress={this._goToPrivacyScreen}>Privacy</Text>
                 </View>
                 { this.state.loading ?
                     
@@ -162,5 +175,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#f5fcff88'
+    },
+    policy: {
+        flex:1, 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    },
+    termsBtn: {
+        textDecorationLine: 'underline'
+    },
+    privacyBtn: {
+        textDecorationLine: 'underline', 
+        marginTop: 10
     }
 });
