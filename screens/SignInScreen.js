@@ -71,6 +71,13 @@ export default class SignInScreen extends React.Component {
                 }
                 else {
                     // storing user role and login flag in async storage.
+
+                    this.setState({
+                        email: ''
+                    });
+                    this.setState({
+                        password: ''
+                    });
                 }
             }
         }
@@ -112,9 +119,9 @@ export default class SignInScreen extends React.Component {
                     source={require('../assets/images/logo_field.png')}
                 />
                 <View>
-                    <FormInput autoCapitalize='none' placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } />
+                    <FormInput autoCapitalize='none' placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });}} value={this.state.email} />
                     {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
-                    <FormInput autoCapitalize='none' secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} />
+                    <FormInput autoCapitalize='none' secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} value={this.state.password} />
                     {!this.state.hasPass ? <FormValidationMessage>{'Password is required'}</FormValidationMessage> : null } 
                     <Button onPress={this._doSignIn}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Sign In' />
                     <Button buttonStyle={styles.signUpButton} fontWeight='bold' title='Register' onPress={() => this.props.navigation.navigate('SignUp') }/> 

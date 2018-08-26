@@ -15,6 +15,7 @@ export default class SignUpScreen extends React.Component {
             email: '',
             password: '',
             streetAddress: '',
+            poBox: '',
             city: '',
             country: '',
             phone: '',
@@ -231,6 +232,35 @@ export default class SignUpScreen extends React.Component {
                       );
                 }
                 else {
+
+                    this.setState({
+                        fullName: ''
+                    });
+                    this.setState({
+                        email: ''
+                    });
+                    this.setState({
+                        password: ''
+                    });
+                    this.setState({
+                        streetAddress: ''
+                    });
+                    this.setState({
+                        poBox: ''
+                    });
+                    this.setState({
+                        city: this.state.cities[0]._id
+                    });
+                    this.setState({
+                        country: this.state.countries[0]._id
+                    });
+                    this.setState({
+                        phone: ''
+                    });
+                    this.setState({
+                        userRole: ''
+                    });
+
                     this.props.navigation.navigate('SignIn');
                 }
             }
@@ -275,15 +305,15 @@ export default class SignUpScreen extends React.Component {
                             source={require('../assets/images/logo_field.png')}
                         />
                         <View>
-                            <FormInput autoCapitalize='none' placeholder='Full Name*' inputStyle={styles.formInput} onChangeText={(fullName) => {this.setState({ fullName });} } />
+                            <FormInput autoCapitalize='none' placeholder='Full Name*' inputStyle={styles.formInput} onChangeText={(fullName) => {this.setState({ fullName });} } value={this.state.fullName} />
                             {!this.state.hasFullName ? <FormValidationMessage>{'Full Name is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } />
+                            <FormInput autoCapitalize='none' placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } value={this.state.email} />
                             {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} />
+                            <FormInput autoCapitalize='none' secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} value={this.state.password} />
                             {!this.state.hasPass ? <FormValidationMessage>{'Password is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' placeholder='Street Address*' inputStyle={styles.formInput} onChangeText={(streetAddress) => {this.setState({ streetAddress });} } />
+                            <FormInput autoCapitalize='none' placeholder='Street Address*' inputStyle={styles.formInput} onChangeText={(streetAddress) => {this.setState({ streetAddress });} } value={this.state.streetAddress} />
                             {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' placeholder='P.O. Box' inputStyle={styles.formInput} onChangeText={(poBox) => {this.setState({ poBox });} } />
+                            <FormInput autoCapitalize='none' placeholder='P.O. Box' inputStyle={styles.formInput} onChangeText={(poBox) => {this.setState({ poBox });} } value={this.state.poBox} />
                             
                             <Picker
                                 selectedValue={this.state.city}
@@ -298,7 +328,7 @@ export default class SignUpScreen extends React.Component {
                                 {this.state.countries.map(country => <Picker.Item key={country._id} label={country.country} value={country._id} /> )}
                             </Picker>
                             
-                            <FormInput autoCapitalize='none' placeholder='Phone/Mobile*' inputStyle={styles.formInput} onChangeText={(phone) => {this.setState({ phone });} } />
+                            <FormInput autoCapitalize='none' placeholder='Phone/Mobile*' inputStyle={styles.formInput} onChangeText={(phone) => {this.setState({ phone });} }  value={this.state.phone} />
                             {!this.state.hasPhone ? <FormValidationMessage>{'Phone/Mobile is required'}</FormValidationMessage> : null } 
                             
                             <Picker
