@@ -94,7 +94,7 @@ export const BookingsStack = createStackNavigator({
 });
 
 export const MyFacilitiesStack = createStackNavigator({
-    MyFacilities: {
+    'My Facilities': {
         screen:  MyFacilitiesScreen,
         navigationOptions: {
             title: 'My Facilities'
