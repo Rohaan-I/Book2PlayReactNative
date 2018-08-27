@@ -8,7 +8,7 @@ export default class FacilityDetailsScreen extends React.Component {
         return (
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <Text>
-                    Facility Details will be here.
+                    Facility details will be here.
                 </Text>
             </ScrollView>
         );

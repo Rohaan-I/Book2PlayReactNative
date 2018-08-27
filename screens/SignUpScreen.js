@@ -375,7 +375,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     formInput: {
-        paddingLeft: 5
+        paddingLeft: 5,
+        color: '#052c52'
     },
     button: {
         marginTop: 10,
