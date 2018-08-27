@@ -1,28 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import AuthStack from './config/router';
-// class SignInScreen extends React.Component {
-
-//   render() {
-//       return (
-//           <View>
-//               <Card>
-//                   <FormLabel>Email*</FormLabel>
-//                   <FormInput placeholder='Email Address' />
-//                   <FormLabel>Password*</FormLabel>
-//                   <FormInput secureTextEntry placeholder='Password' />
-//                   <Button title='Sign In' />
-//               </Card>
-//           </View>
-//       );
-//   }
-// }
-
+import PublicRootScreen from './config/router';
 
 export default class App extends React.Component {
   render() {
-    return <AuthStack />
+    return <PublicRootScreen />
   }
 }
 
