@@ -67,7 +67,7 @@ export const FacilitiesStack = createStackNavigator({
 });
 
 
-export default PublicRootScreen = createBottomTabNavigator(
+export default PublicRootTabScreen = createBottomTabNavigator(
   {
     Facilties: FacilitiesStack,
     SignIn: AuthStack
