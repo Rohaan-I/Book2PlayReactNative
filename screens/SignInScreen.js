@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard } from 'react-native';
-import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
+import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, AsyncStorage } from 'react-native';
+import { Button, FormInput, FormValidationMessage } from 'react-native-elements';
 
 import Auth from '../services/Auth';
 
@@ -71,6 +71,9 @@ export default class SignInScreen extends React.Component {
                 }
                 else {
                     // storing user role and login flag in async storage.
+                    AsyncStorage.setItem('token', response.token);
+                    AsyncStorage.setItem('user', JSON.stringify(response.user));
+                    
 
                     this.setState({
                         email: ''

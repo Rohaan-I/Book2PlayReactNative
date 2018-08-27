@@ -18,6 +18,7 @@ import EditFacilityScreen from '../screens/EditFacilityScreen';
 import DeleteFacilityScreen from '../screens/DeleteFacilityScreen';
 import MyAccountScreen from '../screens/MyAccountScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
+import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 
 
 export const AuthStack = createStackNavigator({
@@ -96,7 +97,7 @@ export const MyFacilitiesStack = createStackNavigator({
     MyFacilities: {
         screen:  MyFacilitiesScreen,
         navigationOptions: {
-            title: 'MyFacilities'
+            title: 'My Facilities'
         }
     },
     AddFacility: {
@@ -119,15 +120,15 @@ export const MyFacilitiesStack = createStackNavigator({
     }   
 }, 
 {
-    initialRouteName: 'MyFacilities'
+    initialRouteName: 'My Facilities'
 });
 
 export const FacilityManagerTabScreen = createBottomTabNavigator(
     {
       Facilties: FacilitiesStack,
       Bookings: BookingsStack,
-      MyFacilities: MyFacilitiesStack,
-      MyAccount: MyAccountScreen,
+      'My Facilities': MyFacilitiesStack,
+      'My Account': MyAccountScreen,
       Notifications: NotificationsScreen
     },
     {
@@ -139,9 +140,9 @@ export const FacilityManagerTabScreen = createBottomTabNavigator(
             iconName = `ios-list`;
           } else if (routeName === 'Bookings') {
             iconName = `ios-calendar`;
-          } else if (routeName === 'MyFacilities') {
+          } else if (routeName === 'My Facilities') {
             iconName = `ios-list-box`;
-          } else if (routeName === 'MyAccount') {
+          } else if (routeName === 'My Account') {
             iconName = `ios-contact`;
           } else if (routeName === 'Notifications') {
             iconName = `ios-notifications-outline`;
@@ -160,7 +161,7 @@ export const FacilityManagerTabScreen = createBottomTabNavigator(
 );
 
 
-export default PublicRootTabScreen = createBottomTabNavigator(
+export const PublicRootTabScreen = createBottomTabNavigator(
   {
     Facilties: FacilitiesStack,
     SignIn: AuthStack
@@ -187,3 +188,15 @@ export default PublicRootTabScreen = createBottomTabNavigator(
     },
   }
 );
+
+export default MainNavigator = createSwitchNavigator(
+    {
+      AuthLoading: AuthLoadingScreen,
+      PublicRootTab: PublicRootTabScreen,
+      FacilityManagerTab: FacilityManagerTabScreen,
+    },
+    {
+      initialRouteName: 'AuthLoading',
+    }
+  );
+  

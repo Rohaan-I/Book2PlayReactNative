@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import PublicRootTabScreen from './config/router';
+import MainNavigator from './config/router';
 
 export default class App extends React.Component {
   render() {
-    return <PublicRootTabScreen />
+    return <MainNavigator />
   }
 }
 
