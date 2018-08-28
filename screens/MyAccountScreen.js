@@ -1,8 +1,18 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, AsyncStorage } from 'react-native';
 import { Card, Button, FormLabel, FormInput } from 'react-native-elements';
 
 export default class MyAccountScreen extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    _doSignOut() {
+        AsyncStorage.removeItem('token');
+        AsyncStorage.removeItem('user');
+        
+        this.props.navigation.navigate('SignIn');
+    }
 
     render() {
         return (
@@ -10,6 +20,7 @@ export default class MyAccountScreen extends React.Component {
                 <Text>
                     My account will be here.
                 </Text>
+                <Button onPress={this._doSignOut}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Sign Out' />
             </ScrollView>
         );
     }
@@ -22,5 +33,9 @@ const styles = StyleSheet.create({
         flex: 1, 
         alignItems: 'center', 
         justifyContent: 'center'
+    },
+    button: {
+        marginTop: 10,
+        backgroundColor: '#efb225'
     }
 });
