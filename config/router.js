@@ -19,6 +19,8 @@ import DeleteFacilityScreen from '../screens/DeleteFacilityScreen';
 import MyAccountScreen from '../screens/MyAccountScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
+import GetStartedScreen from '../screens/GetStartedScreen';
 
 
 export const AuthStack = createStackNavigator({
@@ -199,9 +201,28 @@ export const PublicRootTabScreen = createBottomTabNavigator(
   }
 );
 
+export const WelcomeStack = createStackNavigator({
+    Welcome: {
+        screen:  WelcomeScreen,
+        navigationOptions: {
+            title: 'Welcome'
+        }
+    },
+    GetStarted: {
+        screen:  GetStartedScreen,
+        navigationOptions: {
+            title: 'Get Started'
+        }
+    }
+}, 
+{
+    initialRouteName: 'Welcome'
+});
+
 export default MainNavigator = createSwitchNavigator(
     {
       AuthLoading: AuthLoadingScreen,
+      Welcome: WelcomeStack,
       PublicRootTab: PublicRootTabScreen,
       FacilityManagerTab: FacilityManagerTabScreen,
     },

@@ -81,6 +81,10 @@ export default class SignInScreen extends React.Component {
                     this.setState({
                         password: ''
                     });
+
+                    if(response.user.role == 'Field Manager') {
+                        this.props.navigation.navigate('FacilityManagerTab');
+                    }
                 }
             }
         }
