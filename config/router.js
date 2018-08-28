@@ -94,7 +94,7 @@ export const BookingsStack = createStackNavigator({
 });
 
 export const MyFacilitiesStack = createStackNavigator({
-    'My Facilities': {
+    MyFacilities: {
         screen:  MyFacilitiesScreen,
         navigationOptions: {
             title: 'My Facilities'
@@ -120,15 +120,25 @@ export const MyFacilitiesStack = createStackNavigator({
     }   
 }, 
 {
-    initialRouteName: 'My Facilities'
+    initialRouteName: 'MyFacilities'
 });
 
 export const FacilityManagerTabScreen = createBottomTabNavigator(
     {
       Facilties: FacilitiesStack,
       Bookings: BookingsStack,
-      'My Facilities': MyFacilitiesStack,
-      'My Account': MyAccountScreen,
+      MyFacilities: {
+        screen:  MyFacilitiesStack,
+        navigationOptions: {
+            title: 'My Facilities'
+        }
+      },
+      MyAccount: {
+        screen: MyAccountScreen,
+        navigationOptions: {
+            title: 'My Account'
+        }
+      },
       Notifications: NotificationsScreen
     },
     {
@@ -140,9 +150,9 @@ export const FacilityManagerTabScreen = createBottomTabNavigator(
             iconName = `ios-list`;
           } else if (routeName === 'Bookings') {
             iconName = `ios-calendar`;
-          } else if (routeName === 'My Facilities') {
+          } else if (routeName === 'MyFacilities') {
             iconName = `ios-list-box`;
-          } else if (routeName === 'My Account') {
+          } else if (routeName === 'MyAccount') {
             iconName = `ios-contact`;
           } else if (routeName === 'Notifications') {
             iconName = `ios-notifications-outline`;
