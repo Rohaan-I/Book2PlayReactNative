@@ -125,6 +125,21 @@ export const MyFacilitiesStack = createStackNavigator({
     initialRouteName: 'MyFacilities'
 });
 
+export const MyAccountStack = createStackNavigator({
+    MyAccount: {
+        screen:  MyAccountScreen,
+        navigationOptions: {
+            title: 'My Account'
+        }
+    }
+    /*
+        more routes will be added here. 
+    */  
+}, 
+{
+    initialRouteName: 'MyAccount'
+});
+
 export const FacilityManagerTabScreen = createBottomTabNavigator(
     {
       Facilties: FacilitiesStack,
@@ -135,12 +150,7 @@ export const FacilityManagerTabScreen = createBottomTabNavigator(
             title: 'My Facilities'
         }
       },
-      MyAccount: {
-        screen: MyAccountScreen,
-        navigationOptions: {
-            title: 'My Account'
-        }
-      },
+      MyAccount: MyAccountStack,
       Notifications: NotificationsScreen
     },
     {

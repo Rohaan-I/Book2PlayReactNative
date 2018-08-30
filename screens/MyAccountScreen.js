@@ -3,16 +3,13 @@ import { View, Text, ScrollView, StyleSheet, AsyncStorage } from 'react-native';
 import { Card, Button, FormLabel, FormInput } from 'react-native-elements';
 
 export default class MyAccountScreen extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    _doSignOut() {
+    
+    _doSignOut = () => {
         AsyncStorage.removeItem('token');
         AsyncStorage.removeItem('user');
         
         this.props.navigation.navigate('SignIn');
-    }
+    };
 
     render() {
         return (
