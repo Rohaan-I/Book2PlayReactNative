@@ -19,8 +19,8 @@ export default class AddFacilityScreen extends React.Component {
             phone: '',
             width: '',
             length: '',
-            openHour: '',
-            closeHour: '',
+            openHour: 1,
+            closeHour: 1,
             price: '',
             selectedSports: '',
             selectedFacilities: [],
@@ -229,9 +229,11 @@ export default class AddFacilityScreen extends React.Component {
                     facilities: facilities
                 });
                 
-                
-                //AsyncStorage.setItem('countries', countries);
-    
+
+                this.setState({
+                    selectedSports: this.state.sports[0]._id
+                });
+
                 this.setState({
                     screenLoading: false
                 });
@@ -278,26 +280,6 @@ export default class AddFacilityScreen extends React.Component {
                     hasStreetAddress: true
                 });
             }
-            /*if(this.state.city == '') {
-                this.setState({
-                    hasCity: false
-                })
-            } 
-            else {
-                this.setState({
-                    hasCity: true
-                });
-            }
-            if(this.state.country == '') {
-                this.setState({
-                    hasCountry: false
-                })
-            } 
-            else {
-                this.setState({
-                    hasCountry: true
-                });
-            }*/
             if(this.state.phone == '') {
                 this.setState({
                     hasPhone: false
@@ -370,81 +352,10 @@ export default class AddFacilityScreen extends React.Component {
                     loading: true
                 });
 
-                /*
-                {
-                    "title": "Test title",
-                    "address": {
-                        "streetAddress": "test street address",
-                        "poBox": "test 123",
-                        "city": "5accce61cf4d6a334ce779d7",
-                        "country": "5accce2c19d1bb3d7847a193"
-                    },
-                    "contactNumber": "03219579116",
-                    "fieldSize": {
-                        "width": "200",
-                        "length": "200"
-                    },
-                    "facilities": [
-                        {
-                        "id": "5ad5ae0fc53ab50914d758f0"
-                        },
-                        {
-                        "id": "5ad5ae15c53ab50914d758f1"
-                        },
-                        {
-                        "id": "5ad5ae2bc53ab50914d758f2"
-                        },
-                        {
-                        "id": "5b0371c2af03573168348fc1"
-                        }
-                    ],
-                    "sport": "5accce99cf4d6a334ce779d9",
-                    "price": "200",
-                    "description": "some test desc",
-                    "fieldManager": "5b82eab8182a5b1c63cb81e1",
-                    "location": {
-                        "lat": 25.1041958,
-                        "lng": 55.163236
-                    },
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [
-                        25.1041958,
-                        55.163236
-                        ]
-                    },
-                    "startingHourLimit": {
-                        "hour": 1,
-                        "phase": "am"
-                    },
-                    "endingHourLimit": {
-                        "hour": 4,
-                        "phase": "am"
-                    }
-                }
-                
-                */
-
-                // let reqObject = {
-                //     name: this.state.fullName.trim(),
-                //     email: this.state.email.trim(), 
-                //     password: this.state.password.trim(),
-                //     address: {
-                //         streetAddress: this.state.streetAddress.trim(),
-                //         poBox: this.state.poBox.trim(),
-                //         city: this.state.city.trim(),
-                //         country: this.state.country.trim()
-                //     },
-                //     contactNumber: this.state.phone.trim(),
-                //     role: this.state.userRole,
-                //     location: {
-                //         lat: 25.2048493,
-                //         lng: 55.2707828
-                //     }   
-                // }
-                console.log('user ==========>>');
-                console.log(AsyncStorage.getItem('user'));
                 let user = await AsyncStorage.getItem('user');
+                user = JSON.parse(user);
+                console.log(user);
+
                 let reqObject = {
                     title: this.state.title.trim(),
                     address: {
@@ -459,7 +370,7 @@ export default class AddFacilityScreen extends React.Component {
                         length: this.state.length
                     },
                     facilities: this.state.selectedFacilities,
-                    sport: this.state.sports,
+                    sport: this.state.selectedSports,
                     price: this.state.price,
                     description: this.state.description,
                     fieldManager: user.id,
@@ -478,9 +389,6 @@ export default class AddFacilityScreen extends React.Component {
                     endingHourLimit: this.state.hours[this.state.hours.findIndex(hour => hour.id ===  this.state.closeHour)]
                 }
                 
-                console.log('reqObject =====================>>');
-                console.log(reqObject);
-
                 let response = await this._facility.addField(reqObject);
                 console.log(response);
 
@@ -501,34 +409,66 @@ export default class AddFacilityScreen extends React.Component {
                 else {
 
                     this.setState({
-                        fullName: ''
+                        title: ''
                     });
-                    this.setState({
-                        email: ''
-                    });
-                    this.setState({
-                        password: ''
-                    });
+                
                     this.setState({
                         streetAddress: ''
                     });
-                    this.setState({
-                        poBox: ''
-                    });
-                    this.setState({
-                        city: this.state.cities[0]._id
-                    });
-                    this.setState({
-                        country: this.state.countries[0]._id
-                    });
+                
                     this.setState({
                         phone: ''
                     });
+                    
                     this.setState({
-                        userRole: ''
+                        width: ''
+                    });
+                    
+                    this.setState({
+                        length: ''
+                    });
+                    
+                    this.setState({
+                        price: ''
+                    });
+                
+                    this.setState({
+                        selectedFacilities: []
+                    });
+                
+                    this.setState({
+                        description: ''
                     });
 
-                    this.props.navigation.navigate('SignIn');
+                    this.setState({
+                        city: ''
+                    });
+                    
+                    this.setState({
+                        country: ''
+                    });
+
+                    this.setState({
+                        openHour: 1
+                    });
+
+                    this.setState({
+                        closeHour: 1
+                    });
+
+                    this.setState({
+                        selectedSports: this.state.sports[0]._id
+                    });
+
+                    this.state.facilities.forEach(facility => {
+                        facility.checked = false;
+                    });
+
+                    this.setState({
+                        poBox: ''
+                    });
+
+                    this.props.navigation.navigate('MyFacilities');
                 }
             }
         }
@@ -631,7 +571,7 @@ export default class AddFacilityScreen extends React.Component {
                                 selectedValue={this.state.selectedSports}
                                 style={styles.picker}
                                 onValueChange={(itemValue, itemIndex) => this.setState({selectedSports: itemValue})}>
-                                {this.state.sports.map(sport => <Picker.Item key={sport._id} label={sport.name} value={sport.name} /> )}
+                                {this.state.sports.map(sport => <Picker.Item key={sport._id} label={sport.name} value={sport._id} /> )}
                             </Picker>
                             
                             <FormLabel>Facilities*</FormLabel>
@@ -721,7 +661,7 @@ const styles = StyleSheet.create({
         top: 0,
         bottom: 0,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         backgroundColor: '#f5fcff88'
     },
     screenLoading: {

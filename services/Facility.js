@@ -7,18 +7,19 @@ export default class Faciity extends Base {
     _addFieldUrl = '';
     constructor() {
         super();
-        this._addFieldUrl = this.getBaseUrl() + 'account/authenticate';
+        this._addFieldUrl = this.getBaseUrl() + 'fields';
     }
 
     async addField(reqObject) {
         try {
             
-            let response = await fetch(this._signUpUrl, {
+            let token = await AsyncStorage.getItem('token');
+            let response = await fetch(this._addFieldUrl, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': AsyncStorage.getItem('token')
+                    'Authorization': token
                 },
                 body: JSON.stringify(reqObject),
             });
