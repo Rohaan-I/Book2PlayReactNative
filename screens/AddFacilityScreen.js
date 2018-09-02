@@ -3,7 +3,6 @@ import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Pick
 import { Card, Button, FormLabel, FormInput, FormValidationMessage, CheckBox } from 'react-native-elements';
 
 import Facility from '../services/Facility';
-import MultiSelect from 'react-native-multiple-select';
 
 export default class AddFacilityScreen extends React.Component {
 
