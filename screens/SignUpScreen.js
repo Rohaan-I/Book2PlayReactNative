@@ -315,12 +315,15 @@ export default class SignUpScreen extends React.Component {
                             {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
                             <FormInput autoCapitalize='none' placeholder='P.O. Box' inputStyle={styles.formInput} onChangeText={(poBox) => {this.setState({ poBox });} } value={this.state.poBox} />
                             
+                            <FormLabel>City*</FormLabel>
                             <Picker
                                 selectedValue={this.state.city}
                                 style={styles.picker}
                                 onValueChange={(itemValue, itemIndex) => this.setState({city: itemValue})}>
                                 {this.state.cities.map(city => <Picker.Item key={city._id} label={city.city} value={city._id} /> )}
                             </Picker>
+                            
+                            <FormLabel>Country*</FormLabel>
                             <Picker
                                 selectedValue={this.state.country}
                                 style={styles.picker}
@@ -331,6 +334,7 @@ export default class SignUpScreen extends React.Component {
                             <FormInput autoCapitalize='none' placeholder='Phone/Mobile*' inputStyle={styles.formInput} onChangeText={(phone) => {this.setState({ phone });} }  value={this.state.phone} />
                             {!this.state.hasPhone ? <FormValidationMessage>{'Phone/Mobile is required'}</FormValidationMessage> : null } 
                             
+                            <FormLabel>Role*</FormLabel>
                             <Picker
                                 selectedValue={this.state.userRole}
                                 style={styles.picker}

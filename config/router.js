@@ -1,5 +1,6 @@
 import React from 'react';
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
+import { Button } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -13,7 +14,7 @@ import FacilityDetailsScreen from '../screens/FacilityDetailsScreen';
 import BookingsScreen from '../screens/BookingsScreen';
 import BookingDetailsScreen from '../screens/BookingDetailsScreen';
 import MyFacilitiesScreen from '../screens/MyFacilitiesScreen';
-import AddFacilityScreen from '../screens/BookingDetailsScreen';
+import AddFacilityScreen from '../screens/AddFacilityScreen';
 import EditFacilityScreen from '../screens/EditFacilityScreen';
 import DeleteFacilityScreen from '../screens/DeleteFacilityScreen';
 import MyAccountScreen from '../screens/MyAccountScreen';

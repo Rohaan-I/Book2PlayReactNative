@@ -8,6 +8,8 @@ export default class Base {
         this._baseUrl = 'http://book2play.ae/api/';
         this._citiesUrl = this._baseUrl + 'cities';
         this._countriesUrl = this._baseUrl + 'countries';
+        this._sportsUrl = this._baseUrl + 'sports';
+        this._facilitiesUrl = this._baseUrl + 'facilities';
     }
     
     getBaseUrl() {
@@ -30,6 +32,28 @@ export default class Base {
             let response = await fetch(this._countriesUrl);
             let responseJson = await response.json();
             return responseJson.countries;
+        }
+        catch(err) {
+            throw new Error(err);
+        }
+    }
+
+    async getSports() {
+        try {
+            let response = await fetch(this._sportsUrl);
+            let responseJson = await response.json();
+            return responseJson.sports;
+        }
+        catch(err) {
+            throw new Error(err);
+        }
+    }
+
+    async getFacilities() {
+        try {
+            let response = await fetch(this._facilitiesUrl);
+            let responseJson = await response.json();
+            return responseJson.facilities;
         }
         catch(err) {
             throw new Error(err);
