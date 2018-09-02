@@ -151,7 +151,12 @@ export const FacilityManagerTabScreen = createBottomTabNavigator(
             title: 'My Facilities'
         }
       },
-      MyAccount: MyAccountStack,
+      MyAccount: {
+        screen:  MyAccountStack,
+        navigationOptions: {
+            title: 'My Account'
+        }
+      },
       Notifications: NotificationsScreen
     },
     {

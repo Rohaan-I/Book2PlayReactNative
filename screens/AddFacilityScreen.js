@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView, AsyncStorage, KeyboardAvoidingView } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage, CheckBox } from 'react-native-elements';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import Facility from '../services/Facility';
 
@@ -509,115 +510,122 @@ export default class AddFacilityScreen extends React.Component {
     render() {            
         return (
             <View>
-                <ScrollView contentContainerStyle={styles.contentContainer}>
-                    <View style={styles.container}>
-                        <Image
-                            style={styles.logo}
-                            source={require('../assets/images/logo_field.png')}
-                        />
-                        <View>
-                            <FormInput autoCapitalize='none' placeholder='Title of Field*' inputStyle={styles.formInput} onChangeText={(title) => {this.setState({ title });} } value={this.state.title} />
-                            {!this.state.hasTitle ? <FormValidationMessage>{'Title of Field is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' placeholder='Street Address*' inputStyle={styles.formInput} onChangeText={(streetAddress) => {this.setState({ streetAddress });} } value={this.state.streetAddress} />
-                            {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' placeholder='P.O. Box' inputStyle={styles.formInput} onChangeText={(poBox) => {this.setState({ poBox });} } value={this.state.poBox} />
-                            
-                            <FormLabel>City*</FormLabel>  
-                            <Picker
-                                selectedValue={this.state.city}
-                                style={styles.picker}
-                                onValueChange={(itemValue, itemIndex) => this.setState({city: itemValue})}>
-                                {this.state.cities.map(city => <Picker.Item key={city._id} label={city.city} value={city._id} /> )}
-                            </Picker>
-                            
-                            <FormLabel>Country*</FormLabel>  
-                            <Picker
-                                selectedValue={this.state.country}
-                                style={styles.picker}
-                                onValueChange={(itemValue, itemIndex) => this.setState({country: itemValue})}>
-                                {this.state.countries.map(country => <Picker.Item key={country._id} label={country.country} value={country._id} /> )}
-                            </Picker>
-                            
-                            <FormInput autoCapitalize='none' placeholder='Contact Number*' inputStyle={styles.formInput} onChangeText={(phone) => {this.setState({ phone });} }  value={this.state.phone} />
-                            {!this.state.hasPhone ? <FormValidationMessage>{'Contact Number is required'}</FormValidationMessage> : null } 
-                            
-                            <FormInput autoCapitalize='none' placeholder='Width of Field in Sq m*' inputStyle={styles.formInput} onChangeText={(width) => {this.setState({ width });} }  value={this.state.width} />
-                            {!this.state.hasWidth ? <FormValidationMessage>{'Width of Field is required'}</FormValidationMessage> : null } 
-                            
-                            <FormInput autoCapitalize='none' placeholder='Length of Field in Sq m*' inputStyle={styles.formInput} onChangeText={(length) => {this.setState({ length });} }  value={this.state.length} />
-                            {!this.state.hasLength ? <FormValidationMessage>{'Length of Field is required'}</FormValidationMessage> : null } 
-                            
-                            <FormLabel>Opening Hour*</FormLabel>
-                            <Picker
-                                selectedValue={this.state.openHour}
-                                style={styles.picker}
-                                onValueChange={(itemValue, itemIndex) => this.setState({openHour: itemValue})}>
-                                {this.state.hours.map(hour => <Picker.Item key={hour.id} label={hour.hour + ' ' + hour.phase} value={hour.id} /> )}
-                            </Picker>
-                            
-                            <FormLabel>Closing Hour*</FormLabel>
-                            <Picker
-                                selectedValue={this.state.closeHour}
-                                style={styles.picker}
-                                onValueChange={(itemValue, itemIndex) => this.setState({closeHour: itemValue})}>
-                                {this.state.hours.map(hour => <Picker.Item key={hour.id} label={hour.hour + ' ' + hour.phase} value={hour.id} /> )}
-                            </Picker>
-                            
-                            <FormInput autoCapitalize='none' placeholder='Price*' inputStyle={styles.formInput} onChangeText={(price) => {this.setState({ price });} }  value={this.state.price} />
-                            {!this.state.hasLength ? <FormValidationMessage>{'Price is required'}</FormValidationMessage> : null } 
-                            
-                            <FormLabel>Sport*</FormLabel>
-                            <Picker
-                                selectedValue={this.state.selectedSports}
-                                style={styles.picker}
-                                onValueChange={(itemValue, itemIndex) => this.setState({selectedSports: itemValue})}>
-                                {this.state.sports.map(sport => <Picker.Item key={sport._id} label={sport.name} value={sport._id} /> )}
-                            </Picker>
-                            
-                            <FormLabel>Facilities*</FormLabel>
-                            {this.state.facilities.map(facility => 
-                                <CheckBox
-                                    containerStyle={styles.checkboxContainer}
-                                    key={facility._id}
-                                    title={facility.name}
-                                    checked={facility.checked}
-                                    onPress={() => { 
-                                        facility.checked = !facility.checked;
+                {/* <KeyboardAvoidingView behavior='padding'>
+                    <ScrollView contentContainerStyle={styles.contentContainer}> */}
+                <KeyboardAwareScrollView
+                    resetScrollToCoords={{ x: 0, y: 0 }}
+                    contentContainerStyle={styles.contentContainer}
+                    scrollEnabled={false}>
+                        <View style={styles.container}>
+                            <Image
+                                style={styles.logo}
+                                source={require('../assets/images/logo_field.png')}
+                            />
+                            <View>
+                                <FormInput autoCapitalize='none' placeholder='Title of Field*' inputStyle={styles.formInput} onChangeText={(title) => {this.setState({ title });} } value={this.state.title} />
+                                {!this.state.hasTitle ? <FormValidationMessage>{'Title of Field is required'}</FormValidationMessage> : null } 
+                                <FormInput autoCapitalize='none' placeholder='Street Address*' inputStyle={styles.formInput} onChangeText={(streetAddress) => {this.setState({ streetAddress });} } value={this.state.streetAddress} />
+                                {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
+                                <FormInput autoCapitalize='none' placeholder='P.O. Box' inputStyle={styles.formInput} onChangeText={(poBox) => {this.setState({ poBox });} } value={this.state.poBox} />
+                                
+                                <FormLabel>City*</FormLabel>  
+                                <Picker
+                                    selectedValue={this.state.city}
+                                    style={styles.picker}
+                                    onValueChange={(itemValue, itemIndex) => this.setState({city: itemValue})}>
+                                    {this.state.cities.map(city => <Picker.Item key={city._id} label={city.city} value={city._id} /> )}
+                                </Picker>
+                                
+                                <FormLabel>Country*</FormLabel>  
+                                <Picker
+                                    selectedValue={this.state.country}
+                                    style={styles.picker}
+                                    onValueChange={(itemValue, itemIndex) => this.setState({country: itemValue})}>
+                                    {this.state.countries.map(country => <Picker.Item key={country._id} label={country.country} value={country._id} /> )}
+                                </Picker>
+                                
+                                <FormInput autoCapitalize='none' placeholder='Contact Number*' inputStyle={styles.formInput} onChangeText={(phone) => {this.setState({ phone });} }  value={this.state.phone} />
+                                {!this.state.hasPhone ? <FormValidationMessage>{'Contact Number is required'}</FormValidationMessage> : null } 
+                                
+                                <FormInput autoCapitalize='none' placeholder='Width of Field in Sq m*' inputStyle={styles.formInput} onChangeText={(width) => {this.setState({ width });} }  value={this.state.width} />
+                                {!this.state.hasWidth ? <FormValidationMessage>{'Width of Field is required'}</FormValidationMessage> : null } 
+                                
+                                <FormInput autoCapitalize='none' placeholder='Length of Field in Sq m*' inputStyle={styles.formInput} onChangeText={(length) => {this.setState({ length });} }  value={this.state.length} />
+                                {!this.state.hasLength ? <FormValidationMessage>{'Length of Field is required'}</FormValidationMessage> : null } 
+                                
+                                <FormLabel>Opening Hour*</FormLabel>
+                                <Picker
+                                    selectedValue={this.state.openHour}
+                                    style={styles.picker}
+                                    onValueChange={(itemValue, itemIndex) => this.setState({openHour: itemValue})}>
+                                    {this.state.hours.map(hour => <Picker.Item key={hour.id} label={hour.hour + ' ' + hour.phase} value={hour.id} /> )}
+                                </Picker>
+                                
+                                <FormLabel>Closing Hour*</FormLabel>
+                                <Picker
+                                    selectedValue={this.state.closeHour}
+                                    style={styles.picker}
+                                    onValueChange={(itemValue, itemIndex) => this.setState({closeHour: itemValue})}>
+                                    {this.state.hours.map(hour => <Picker.Item key={hour.id} label={hour.hour + ' ' + hour.phase} value={hour.id} /> )}
+                                </Picker>
+                                
+                                <FormInput autoCapitalize='none' placeholder='Price*' inputStyle={styles.formInput} onChangeText={(price) => {this.setState({ price });} }  value={this.state.price} />
+                                {!this.state.hasLength ? <FormValidationMessage>{'Price is required'}</FormValidationMessage> : null } 
+                                
+                                <FormLabel>Sport*</FormLabel>
+                                <Picker
+                                    selectedValue={this.state.selectedSports}
+                                    style={styles.picker}
+                                    onValueChange={(itemValue, itemIndex) => this.setState({selectedSports: itemValue})}>
+                                    {this.state.sports.map(sport => <Picker.Item key={sport._id} label={sport.name} value={sport._id} /> )}
+                                </Picker>
+                                
+                                <FormLabel>Facilities*</FormLabel>
+                                {this.state.facilities.map(facility => 
+                                    <CheckBox
+                                        containerStyle={styles.checkboxContainer}
+                                        key={facility._id}
+                                        title={facility.name}
+                                        checked={facility.checked}
+                                        onPress={() => { 
+                                            facility.checked = !facility.checked;
 
-                                        if(facility.checked) {
-                                            this.setState({
-                                                selectedFacilities: [...this.state.selectedFacilities, facility]
-                                            });
-                                        }
-                                        else {
-                                            this.setState({
-                                                selectedFacilities: this.state.selectedFacilities.filter(f => f._id === facility._id)
-                                            });
-                                        }
-                                    }}
-                                />
-                            )}
-                            {!this.state.hasSelectedFacilities ? <FormValidationMessage>{'Facilities are required'}</FormValidationMessage> : null } 
+                                            if(facility.checked) {
+                                                this.setState({
+                                                    selectedFacilities: [...this.state.selectedFacilities, facility]
+                                                });
+                                            }
+                                            else {
+                                                this.setState({
+                                                    selectedFacilities: this.state.selectedFacilities.filter(f => f._id === facility._id)
+                                                });
+                                            }
+                                        }}
+                                    />
+                                )}
+                                {!this.state.hasSelectedFacilities ? <FormValidationMessage>{'Facilities are required'}</FormValidationMessage> : null } 
+                                
+                                
+                                <FormInput  multiline={true} numberOfLines={4} autoCapitalize='none' placeholder='Description*' inputStyle={styles.formInput} onChangeText={(description) => {this.setState({ description });} }  value={this.state.description} />
+                                {!this.state.hasDescription ? <FormValidationMessage>{'Description is required'}</FormValidationMessage> : null } 
                             
-                            
-                            <FormInput  multiline={true} numberOfLines={4} autoCapitalize='none' placeholder='Description*' inputStyle={styles.formInput} onChangeText={(description) => {this.setState({ description });} }  value={this.state.description} />
-                            {!this.state.hasDescription ? <FormValidationMessage>{'Description is required'}</FormValidationMessage> : null } 
-                        
-                            <Button onPress={this._doAddField}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Add Field' />
+                                <Button onPress={this._doAddField}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Add Field' />
+                                
+                            </View>
+                            { this.state.loading ?
+                                
+                                <View pointerEvents='none' style={styles.loading}>
+                                    <ActivityIndicator size="large" color="#052c52" />
+                                </View>  
+
+                            : null}
+
                             
                         </View>
-                        { this.state.loading ?
-                            
-                            <View pointerEvents='none' style={styles.loading}>
-                                <ActivityIndicator size="large" color="#052c52" />
-                            </View>  
-
-                        : null}
-
-                        
-                    </View>
-                    
-                </ScrollView>
+                    {/* </ScrollView>
+                </KeyboardAvoidingView>
+                 */}
+                </KeyboardAwareScrollView>
                 { this.state.screenLoading ?
                     
                     <View pointerEvents='none' style={styles.screenLoading}>
