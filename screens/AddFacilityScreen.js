@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView, AsyncStorage, KeyboardAvoidingView } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage, CheckBox } from 'react-native-elements';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import Facility from '../services/Facility';
 
@@ -510,7 +509,7 @@ export default class AddFacilityScreen extends React.Component {
     render() {            
         return (
             <View>
-                <KeyboardAvoidingView behavior='padding'>
+                {/* <KeyboardAvoidingView behavior='height'> */}
                     <ScrollView contentContainerStyle={styles.contentContainer}>
                         <View style={styles.container}>
                             <Image
@@ -619,7 +618,7 @@ export default class AddFacilityScreen extends React.Component {
                             
                         </View>
                      </ScrollView>
-                </KeyboardAvoidingView>
+                {/* </KeyboardAvoidingView> */}
                  
                 { this.state.screenLoading ?
                     
