@@ -510,12 +510,8 @@ export default class AddFacilityScreen extends React.Component {
     render() {            
         return (
             <View>
-                {/* <KeyboardAvoidingView behavior='padding'>
-                    <ScrollView contentContainerStyle={styles.contentContainer}> */}
-                <KeyboardAwareScrollView
-                    resetScrollToCoords={{ x: 0, y: 0 }}
-                    contentContainerStyle={styles.contentContainer}
-                    scrollEnabled={false}>
+                <KeyboardAvoidingView behavior='padding'>
+                    <ScrollView contentContainerStyle={styles.contentContainer}>
                         <View style={styles.container}>
                             <Image
                                 style={styles.logo}
@@ -622,10 +618,9 @@ export default class AddFacilityScreen extends React.Component {
 
                             
                         </View>
-                    {/* </ScrollView>
+                     </ScrollView>
                 </KeyboardAvoidingView>
-                 */}
-                </KeyboardAwareScrollView>
+                 
                 { this.state.screenLoading ?
                     
                     <View pointerEvents='none' style={styles.screenLoading}>
