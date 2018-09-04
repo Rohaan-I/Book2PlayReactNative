@@ -3,6 +3,8 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Card, Button, FormLabel, FormInput } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import Facility from '../services/Facility';
+
 export default class MyFacilitiesScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
@@ -12,6 +14,12 @@ export default class MyFacilitiesScreen extends React.Component {
             )
         };
     };
+
+    _facility = null;
+    constructor(props) {
+        super(props);
+        this._facility = new Facility();
+    }
 
     render() {
         return (

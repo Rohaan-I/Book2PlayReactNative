@@ -5,9 +5,12 @@ import { AsyncStorage } from 'react-native';
 export default class Faciity extends Base {
 
     _addFieldUrl = '';
+    _myFieldsUrl = '';
+
     constructor() {
         super();
         this._addFieldUrl = this.getBaseUrl() + 'fields';
+        this._myFieldsUrl = this.getBaseUrl() + 'fields/myfields/';
     }
 
     async addField(reqObject) {
@@ -29,6 +32,20 @@ export default class Faciity extends Base {
         }
         catch(err) {
             console.log(err);
+            throw new Error(err);
+        }
+    }
+
+    async getMyFields() {
+        try {
+            let user = await AsyncStorage.getItem('user');
+            user = JSON.parse(user);
+
+            let response = await fetch(this._myFieldsUrl + '/' + user.id);
+            let responseJson = await response.json();
+            return responseJson.sports;
+        }
+        catch(err) {
             throw new Error(err);
         }
     }
