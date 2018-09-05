@@ -587,12 +587,12 @@ export default class AddFacilityScreen extends React.Component {
 
                                             if(facility.checked) {
                                                 this.setState({
-                                                    selectedFacilities: [...this.state.selectedFacilities, facility]
+                                                    selectedFacilities: [...this.state.selectedFacilities, {id: facility._id}]
                                                 });
                                             }
                                             else {
                                                 this.setState({
-                                                    selectedFacilities: this.state.selectedFacilities.filter(f => f._id === facility._id)
+                                                    selectedFacilities: this.state.selectedFacilities.filter(f => f.id === facility._id)
                                                 });
                                             }
                                         }}

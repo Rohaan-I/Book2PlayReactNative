@@ -41,11 +41,22 @@ export default class Faciity extends Base {
             let user = await AsyncStorage.getItem('user');
             user = JSON.parse(user);
 
-            let response = await fetch(this._myFieldsUrl + '/' + user.id);
+            let token = await AsyncStorage.getItem('token');
+            let response = await fetch(this._myFieldsUrl + user.id, 
+            {   
+                method: "GET",
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                }
+            }
+        );
             let responseJson = await response.json();
-            return responseJson.sports;
+            return responseJson.fields;
         }
         catch(err) {
+            console.log(err);
             throw new Error(err);
         }
     }
