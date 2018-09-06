@@ -21,11 +21,15 @@ export default class MyFacilitiesScreen extends React.Component {
         this._facility = new Facility();
         this.state = {
             fields: [],
-            screenLoading: true
+            screenLoading: false
         }
     }
 
-    async componentDidMount() {
+    async componentWillMount() {
+        this.setState({
+            screenLoading: true
+        });
+        console.log('inside componentWillMount ==========>>');
         this.setState({
             fields: await this._facility.getMyFields()
         });
@@ -44,37 +48,40 @@ export default class MyFacilitiesScreen extends React.Component {
                             key={field._id}
                             title={field.title}
                             image={require('../assets/images/logo_field.png')}>
-                                <Text style={{marginBottom: 10}}>
-                                    <Text>
-                                        {field.address.streetAddress}
-                                    </Text>
-                                    <Text>
-                                        {field.address.poBox},{field.address.city.city}
-                                    </Text>
-                                    <Text>
-                                        {field.address.country.country}
-                                    </Text>
+                                <Text style={styles.firstHeading}>
+                                    {field.address.streetAddress}
                                 </Text>
-                                <Text style={{marginBottom: 10}}>
-                                    <Text>
-                                        Sport
-                                    </Text>
-                                    <Text>
-                                        {field.sport.name}
-                                    </Text>
+                                <Text>
+                                    {field.address.poBox},{field.address.city.city}
                                 </Text>
-                                <Text style={{marginBottom: 10}}>
-                                    <Text>
-                                        Facilities
-                                    </Text>
-                                    <Text>
-                                        {field.facilities.map(fac => <Text>{fac.id.name}</Text> )}
-                                    </Text>
+                                <Text>
+                                    {field.address.country.country}
                                 </Text>
-                                <Button
-                                    backgroundColor='#efb225'
-                                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                                    title='Details' />
+                                <Text style={styles.heading}>
+                                    Sport
+                                </Text>
+                                <Text>
+                                    {field.sport.name}
+                                </Text>
+                                <Text style={styles.heading}>
+                                    Facilities
+                                </Text>
+                                <View style={styles.chipsContainer}>
+                                    {field.facilities.map(fac => 
+                                        <Text 
+                                            key={fac._id} 
+                                            style={styles.chip}>
+                                            
+                                            {fac.id.name}
+                                        </Text>
+                                    )}
+                                </View>
+                                <View>
+                                    <Button
+                                        backgroundColor='#efb225'
+                                        buttonStyle={styles.detailsBtn}
+                                        title='Details' />
+                                </View>
                             </Card>);
                     })}
                 </ScrollView>
@@ -106,5 +113,35 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#ffffff'
+    },
+    firstHeading: {
+        fontSize: 16, 
+        color: '#052c52', 
+        fontWeight: 'bold'
+    },
+    heading: {
+        marginTop: 10, 
+        fontSize: 16, 
+        color: '#052c52', 
+        fontWeight: 'bold'
+    },
+    chipsContainer: {
+        marginBottom: 10, 
+        flex: 1, 
+        flexDirection: 'row', 
+        flexWrap: 'wrap'
+    },
+    detailsBtn: {
+        borderRadius: 0, 
+        marginLeft: 0, 
+        marginRight: 0, 
+        marginBottom: 0
+    },
+    chip: {
+        marginTop: 5, 
+        marginRight: 5, 
+        borderRadius: 40, 
+        backgroundColor: '#dedede', 
+        padding: 8
     }
 });
