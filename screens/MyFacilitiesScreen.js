@@ -16,6 +16,7 @@ export default class MyFacilitiesScreen extends React.Component {
     };
 
     _facility = null;
+    _sub = null;
     constructor(props) {
         super(props);
         this._facility = new Facility();
@@ -24,18 +25,27 @@ export default class MyFacilitiesScreen extends React.Component {
             screenLoading: false
         }
     }
+    
+    componentDidMount() {
+        this._sub = this.props.navigation.addListener(
+            'didFocus',
+            async payload => {
+                console.debug('didFocus', payload);  
+                this.setState({
+                    screenLoading: true
+                });      
+                this.setState({
+                    fields: await this._facility.getMyFields()
+                });
+                this.setState({
+                    screenLoading: false
+                });
+            }
+        );
+    }
 
-    async componentWillMount() {
-        this.setState({
-            screenLoading: true
-        });
-        console.log('inside componentWillMount ==========>>');
-        this.setState({
-            fields: await this._facility.getMyFields()
-        });
-        this.setState({
-            screenLoading: false
-        });
+    componentWillUnmount() {
+        this._sub.remove();
     }
 
     render() {
@@ -80,6 +90,7 @@ export default class MyFacilitiesScreen extends React.Component {
                                     <Button
                                         backgroundColor='#efb225'
                                         buttonStyle={styles.detailsBtn}
+                                        containerViewStyle={{width: '100%', marginLeft: 0}}
                                         title='Details' />
                                 </View>
                             </Card>);
