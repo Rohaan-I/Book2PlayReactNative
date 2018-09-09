@@ -506,10 +506,11 @@ export default class AddFacilityScreen extends React.Component {
         this.setState({ selectedFacilities });
     }
 
+
     render() {            
         return (
             <View>
-                {/* <KeyboardAvoidingView behavior='height'> */}
+                {/* <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={30} > */}
                     <ScrollView contentContainerStyle={styles.contentContainer}>
                         <View style={styles.container}>
                             <Image
@@ -517,11 +518,31 @@ export default class AddFacilityScreen extends React.Component {
                                 source={require('../assets/images/logo_field.png')}
                             />
                             <View>
-                                <FormInput autoCapitalize='none' placeholder='Title of Field*' inputStyle={styles.formInput} onChangeText={(title) => {this.setState({ title });} } value={this.state.title} />
+                                <FormInput autoCapitalize='none' 
+                                placeholder='Title of Field*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(title) => {this.setState({ title });} } 
+                                value={this.state.title} 
+                                onSubmitEditing={() => { this.addressInput.focus(); }}
+                                />
                                 {!this.state.hasTitle ? <FormValidationMessage>{'Title of Field is required'}</FormValidationMessage> : null } 
-                                <FormInput autoCapitalize='none' placeholder='Street Address*' inputStyle={styles.formInput} onChangeText={(streetAddress) => {this.setState({ streetAddress });} } value={this.state.streetAddress} />
+                                <FormInput autoCapitalize='none' 
+                                placeholder='Street Address*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(streetAddress) => {this.setState({ streetAddress });} } 
+                                value={this.state.streetAddress}
+                                ref={(input) => { this.addressInput = input; }}
+                                onSubmitEditing={() => { this.poBoxInput.focus(); }}
+                                />
                                 {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
-                                <FormInput autoCapitalize='none' placeholder='P.O. Box' inputStyle={styles.formInput} onChangeText={(poBox) => {this.setState({ poBox });} } value={this.state.poBox} />
+                                <FormInput autoCapitalize='none' 
+                                placeholder='P.O. Box' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(poBox) => {this.setState({ poBox });} } 
+                                value={this.state.poBox} 
+                                ref={(input) => { this.poBoxInput = input; }}
+                                onSubmitEditing={() => { this.phoneInput.focus(); }}
+                                />
                                 
                                 <FormLabel>City*</FormLabel>  
                                 <Picker
@@ -539,13 +560,33 @@ export default class AddFacilityScreen extends React.Component {
                                     {this.state.countries.map(country => <Picker.Item key={country._id} label={country.country} value={country._id} /> )}
                                 </Picker>
                                 
-                                <FormInput autoCapitalize='none' placeholder='Contact Number*' inputStyle={styles.formInput} onChangeText={(phone) => {this.setState({ phone });} }  value={this.state.phone} />
+                                <FormInput autoCapitalize='none' 
+                                placeholder='Contact Number*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(phone) => {this.setState({ phone });} }  
+                                value={this.state.phone} 
+                                ref={(input) => { this.phoneInput = input; }}
+                                onSubmitEditing={() => { this.widthInput.focus(); }}
+                                />
                                 {!this.state.hasPhone ? <FormValidationMessage>{'Contact Number is required'}</FormValidationMessage> : null } 
                                 
-                                <FormInput autoCapitalize='none' placeholder='Width of Field in Sq m*' inputStyle={styles.formInput} onChangeText={(width) => {this.setState({ width });} }  value={this.state.width} />
+                                <FormInput autoCapitalize='none' 
+                                placeholder='Width of Field in Sq m*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(width) => {this.setState({ width });} }  
+                                value={this.state.width} 
+                                ref={(input) => { this.widthInput = input; }}
+                                onSubmitEditing={() => { this.lengthInput.focus(); }}
+                                />
                                 {!this.state.hasWidth ? <FormValidationMessage>{'Width of Field is required'}</FormValidationMessage> : null } 
                                 
-                                <FormInput autoCapitalize='none' placeholder='Length of Field in Sq m*' inputStyle={styles.formInput} onChangeText={(length) => {this.setState({ length });} }  value={this.state.length} />
+                                <FormInput autoCapitalize='none' 
+                                placeholder='Length of Field in Sq m*' 
+                                inputStyle={styles.formInput} onChangeText={(length) => {this.setState({ length });} }  
+                                value={this.state.length} 
+                                ref={(input) => { this.lengthInput = input; }}
+                                onSubmitEditing={() => { this.priceInput.focus(); }}
+                                />
                                 {!this.state.hasLength ? <FormValidationMessage>{'Length of Field is required'}</FormValidationMessage> : null } 
                                 
                                 <FormLabel>Opening Hour*</FormLabel>
@@ -564,7 +605,14 @@ export default class AddFacilityScreen extends React.Component {
                                     {this.state.hours.map(hour => <Picker.Item key={hour.id} label={hour.hour + ' ' + hour.phase} value={hour.id} /> )}
                                 </Picker>
                                 
-                                <FormInput autoCapitalize='none' placeholder='Price*' inputStyle={styles.formInput} onChangeText={(price) => {this.setState({ price });} }  value={this.state.price} />
+                                <FormInput autoCapitalize='none' 
+                                placeholder='Price*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(price) => {this.setState({ price });} }  
+                                value={this.state.price} 
+                                ref={(input) => { this.priceInput = input; }}
+                                onSubmitEditing={() => { this.descInput.focus(); }}
+                                />
                                 {!this.state.hasLength ? <FormValidationMessage>{'Price is required'}</FormValidationMessage> : null } 
                                 
                                 <FormLabel>Sport*</FormLabel>
@@ -601,7 +649,16 @@ export default class AddFacilityScreen extends React.Component {
                                 {!this.state.hasSelectedFacilities ? <FormValidationMessage>{'Facilities are required'}</FormValidationMessage> : null } 
                                 
                                 
-                                <FormInput  multiline={true} numberOfLines={4} autoCapitalize='none' placeholder='Description*' inputStyle={styles.formInput} onChangeText={(description) => {this.setState({ description });} }  value={this.state.description} />
+                                <FormInput  multiline={true} 
+                                numberOfLines={4} 
+                                autoCapitalize='none' 
+                                placeholder='Description*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(description) => {this.setState({ description });} }  
+                                value={this.state.description} 
+                                ref={(input) => { this.descInput = input; }}
+                                />
+                                
                                 {!this.state.hasDescription ? <FormValidationMessage>{'Description is required'}</FormValidationMessage> : null } 
                             
                                 <Button onPress={this._doAddField}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Add Field' />
@@ -619,7 +676,6 @@ export default class AddFacilityScreen extends React.Component {
                         </View>
                      </ScrollView>
                 {/* </KeyboardAvoidingView> */}
-                 
                 { this.state.screenLoading ?
                     
                     <View pointerEvents='none' style={styles.screenLoading}>

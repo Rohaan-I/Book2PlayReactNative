@@ -30,7 +30,6 @@ export default class MyFacilitiesScreen extends React.Component {
         this._sub = this.props.navigation.addListener(
             'didFocus',
             async payload => {
-                console.debug('didFocus', payload);  
                 this.setState({
                     screenLoading: true
                 });      

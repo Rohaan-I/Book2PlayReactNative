@@ -305,16 +305,49 @@ export default class SignUpScreen extends React.Component {
                             source={require('../assets/images/logo_field.png')}
                         />
                         <View>
-                            <FormInput autoCapitalize='none' placeholder='Full Name*' inputStyle={styles.formInput} onChangeText={(fullName) => {this.setState({ fullName });} } value={this.state.fullName} />
+                            <FormInput autoCapitalize='none' 
+                            placeholder='Full Name*' 
+                            inputStyle={styles.formInput} 
+                            onChangeText={(fullName) => {this.setState({ fullName });} } 
+                            value={this.state.fullName} 
+                            onSubmitEditing={() => { this.emailInput.focus(); }}
+                            />
                             {!this.state.hasFullName ? <FormValidationMessage>{'Full Name is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' placeholder='Email*' inputStyle={styles.formInput} onChangeText={(email) => {this.setState({ email });} } value={this.state.email} />
+                            <FormInput autoCapitalize='none' 
+                            placeholder='Email*' 
+                            inputStyle={styles.formInput} 
+                            onChangeText={(email) => {this.setState({ email });} } 
+                            value={this.state.email} 
+                            ref={(input) => { this.emailInput = input; }}
+                            onSubmitEditing={() => { this.passInput.focus(); }}
+                            />
                             {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' secureTextEntry placeholder='Password*' inputStyle={styles.formInput} onChangeText={(password) => this.setState({password})} value={this.state.password} />
+                            <FormInput autoCapitalize='none' 
+                            secureTextEntry placeholder='Password*' 
+                            inputStyle={styles.formInput} 
+                            onChangeText={(password) => this.setState({password})} 
+                            value={this.state.password} 
+                            ref={(input) => { this.passInput = input; }}
+                            onSubmitEditing={() => { this.addressInput.focus(); }}
+                            />
                             {!this.state.hasPass ? <FormValidationMessage>{'Password is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' placeholder='Street Address*' inputStyle={styles.formInput} onChangeText={(streetAddress) => {this.setState({ streetAddress });} } value={this.state.streetAddress} />
+                            <FormInput autoCapitalize='none' 
+                            placeholder='Street Address*' 
+                            inputStyle={styles.formInput} 
+                            onChangeText={(streetAddress) => {this.setState({ streetAddress });} } 
+                            value={this.state.streetAddress} 
+                            ref={(input) => { this.addressInput = input; }}
+                            onSubmitEditing={() => { this.poBoxInput.focus(); }}
+                            />
                             {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' placeholder='P.O. Box' inputStyle={styles.formInput} onChangeText={(poBox) => {this.setState({ poBox });} } value={this.state.poBox} />
-                            
+                            <FormInput autoCapitalize='none' 
+                            placeholder='P.O. Box' 
+                            inputStyle={styles.formInput} 
+                            onChangeText={(poBox) => {this.setState({ poBox });} } 
+                            value={this.state.poBox} 
+                            ref={(input) => { this.poBoxInput = input; }}
+                            onSubmitEditing={() => { this.phoneInput.focus(); }}
+                            />
                             <FormLabel>City*</FormLabel>
                             <Picker
                                 selectedValue={this.state.city}
@@ -331,7 +364,13 @@ export default class SignUpScreen extends React.Component {
                                 {this.state.countries.map(country => <Picker.Item key={country._id} label={country.country} value={country._id} /> )}
                             </Picker>
                             
-                            <FormInput autoCapitalize='none' placeholder='Phone/Mobile*' inputStyle={styles.formInput} onChangeText={(phone) => {this.setState({ phone });} }  value={this.state.phone} />
+                            <FormInput autoCapitalize='none' 
+                            placeholder='Phone/Mobile*' 
+                            inputStyle={styles.formInput} 
+                            onChangeText={(phone) => {this.setState({ phone });} }  
+                            value={this.state.phone} 
+                            ref={(input) => { this.phoneInput = input; }}
+                            />
                             {!this.state.hasPhone ? <FormValidationMessage>{'Phone/Mobile is required'}</FormValidationMessage> : null } 
                             
                             <FormLabel>Role*</FormLabel>
