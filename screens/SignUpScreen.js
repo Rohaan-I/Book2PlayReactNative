@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, Image, Alert, ActivityIndicator, Keyboard, Picker, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 
 import Auth from '../services/Auth';
@@ -298,107 +298,111 @@ export default class SignUpScreen extends React.Component {
     render() {            
         return (
             <View>
-                <ScrollView contentContainerStyle={styles.contentContainer}>
-                    <View style={styles.container}>
-                        <Image
-                            style={styles.logo}
-                            source={require('../assets/images/logo_field.png')}
-                        />
-                        <View>
-                            <FormInput autoCapitalize='none' 
-                            placeholder='Full Name*' 
-                            inputStyle={styles.formInput} 
-                            onChangeText={(fullName) => {this.setState({ fullName });} } 
-                            value={this.state.fullName} 
-                            onSubmitEditing={() => { this.emailInput.focus(); }}
+                <KeyboardAvoidingView 
+                behavior='padding'
+                keyboardVerticalOffset={100}>
+                    <ScrollView contentContainerStyle={styles.contentContainer}>
+                        <View style={styles.container}>
+                            <Image
+                                style={styles.logo}
+                                source={require('../assets/images/logo_field.png')}
                             />
-                            {!this.state.hasFullName ? <FormValidationMessage>{'Full Name is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' 
-                            placeholder='Email*' 
-                            inputStyle={styles.formInput} 
-                            onChangeText={(email) => {this.setState({ email });} } 
-                            value={this.state.email} 
-                            ref={(input) => { this.emailInput = input; }}
-                            onSubmitEditing={() => { this.passInput.focus(); }}
-                            />
-                            {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' 
-                            secureTextEntry placeholder='Password*' 
-                            inputStyle={styles.formInput} 
-                            onChangeText={(password) => this.setState({password})} 
-                            value={this.state.password} 
-                            ref={(input) => { this.passInput = input; }}
-                            onSubmitEditing={() => { this.addressInput.focus(); }}
-                            />
-                            {!this.state.hasPass ? <FormValidationMessage>{'Password is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' 
-                            placeholder='Street Address*' 
-                            inputStyle={styles.formInput} 
-                            onChangeText={(streetAddress) => {this.setState({ streetAddress });} } 
-                            value={this.state.streetAddress} 
-                            ref={(input) => { this.addressInput = input; }}
-                            onSubmitEditing={() => { this.poBoxInput.focus(); }}
-                            />
-                            {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
-                            <FormInput autoCapitalize='none' 
-                            placeholder='P.O. Box' 
-                            inputStyle={styles.formInput} 
-                            onChangeText={(poBox) => {this.setState({ poBox });} } 
-                            value={this.state.poBox} 
-                            ref={(input) => { this.poBoxInput = input; }}
-                            onSubmitEditing={() => { this.phoneInput.focus(); }}
-                            />
-                            <FormLabel>City*</FormLabel>
-                            <Picker
-                                selectedValue={this.state.city}
-                                style={styles.picker}
-                                onValueChange={(itemValue, itemIndex) => this.setState({city: itemValue})}>
-                                {this.state.cities.map(city => <Picker.Item key={city._id} label={city.city} value={city._id} /> )}
-                            </Picker>
-                            
-                            <FormLabel>Country*</FormLabel>
-                            <Picker
-                                selectedValue={this.state.country}
-                                style={styles.picker}
-                                onValueChange={(itemValue, itemIndex) => this.setState({country: itemValue})}>
-                                {this.state.countries.map(country => <Picker.Item key={country._id} label={country.country} value={country._id} /> )}
-                            </Picker>
-                            
-                            <FormInput autoCapitalize='none' 
-                            placeholder='Phone/Mobile*' 
-                            inputStyle={styles.formInput} 
-                            onChangeText={(phone) => {this.setState({ phone });} }  
-                            value={this.state.phone} 
-                            ref={(input) => { this.phoneInput = input; }}
-                            />
-                            {!this.state.hasPhone ? <FormValidationMessage>{'Phone/Mobile is required'}</FormValidationMessage> : null } 
-                            
-                            <FormLabel>Role*</FormLabel>
-                            <Picker
-                                selectedValue={this.state.userRole}
-                                style={styles.picker}
-                                onValueChange={(itemValue, itemIndex) => this.setState({userRole: itemValue})}>
-                                <Picker.Item label="List my field" value="1" />
-                                <Picker.Item label="Reserve a field" value="2" />
-                            </Picker>
+                            <View>
+                                <FormInput autoCapitalize='none' 
+                                placeholder='Full Name*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(fullName) => {this.setState({ fullName });} } 
+                                value={this.state.fullName} 
+                                onSubmitEditing={() => { this.emailInput.focus(); }}
+                                />
+                                {!this.state.hasFullName ? <FormValidationMessage>{'Full Name is required'}</FormValidationMessage> : null } 
+                                <FormInput autoCapitalize='none' 
+                                placeholder='Email*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(email) => {this.setState({ email });} } 
+                                value={this.state.email} 
+                                ref={(input) => { this.emailInput = input; }}
+                                onSubmitEditing={() => { this.passInput.focus(); }}
+                                />
+                                {!this.state.hasEmail ? <FormValidationMessage>{'Email is required'}</FormValidationMessage> : null } 
+                                <FormInput autoCapitalize='none' 
+                                secureTextEntry placeholder='Password*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(password) => this.setState({password})} 
+                                value={this.state.password} 
+                                ref={(input) => { this.passInput = input; }}
+                                onSubmitEditing={() => { this.addressInput.focus(); }}
+                                />
+                                {!this.state.hasPass ? <FormValidationMessage>{'Password is required'}</FormValidationMessage> : null } 
+                                <FormInput autoCapitalize='none' 
+                                placeholder='Street Address*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(streetAddress) => {this.setState({ streetAddress });} } 
+                                value={this.state.streetAddress} 
+                                ref={(input) => { this.addressInput = input; }}
+                                onSubmitEditing={() => { this.poBoxInput.focus(); }}
+                                />
+                                {!this.state.hasStreetAddress ? <FormValidationMessage>{'Street Address is required'}</FormValidationMessage> : null } 
+                                <FormInput autoCapitalize='none' 
+                                placeholder='P.O. Box' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(poBox) => {this.setState({ poBox });} } 
+                                value={this.state.poBox} 
+                                ref={(input) => { this.poBoxInput = input; }}
+                                onSubmitEditing={() => { this.phoneInput.focus(); }}
+                                />
+                                <FormLabel>City*</FormLabel>
+                                <Picker
+                                    selectedValue={this.state.city}
+                                    style={styles.picker}
+                                    onValueChange={(itemValue, itemIndex) => this.setState({city: itemValue})}>
+                                    {this.state.cities.map(city => <Picker.Item key={city._id} label={city.city} value={city._id} /> )}
+                                </Picker>
+                                
+                                <FormLabel>Country*</FormLabel>
+                                <Picker
+                                    selectedValue={this.state.country}
+                                    style={styles.picker}
+                                    onValueChange={(itemValue, itemIndex) => this.setState({country: itemValue})}>
+                                    {this.state.countries.map(country => <Picker.Item key={country._id} label={country.country} value={country._id} /> )}
+                                </Picker>
+                                
+                                <FormInput autoCapitalize='none' 
+                                placeholder='Phone/Mobile*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(phone) => {this.setState({ phone });} }  
+                                value={this.state.phone} 
+                                ref={(input) => { this.phoneInput = input; }}
+                                />
+                                {!this.state.hasPhone ? <FormValidationMessage>{'Phone/Mobile is required'}</FormValidationMessage> : null } 
+                                
+                                <FormLabel>Role*</FormLabel>
+                                <Picker
+                                    selectedValue={this.state.userRole}
+                                    style={styles.picker}
+                                    onValueChange={(itemValue, itemIndex) => this.setState({userRole: itemValue})}>
+                                    <Picker.Item label="List my field" value="1" />
+                                    <Picker.Item label="Reserve a field" value="2" />
+                                </Picker>
 
-                            <Button onPress={this._doSignUp}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Create An Account' />
-                            <Button buttonStyle={styles.signInButton} fontWeight='bold' title='Sign In' onPress={() => this.props.navigation.navigate('SignIn') }/> 
+                                <Button onPress={this._doSignUp}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Create An Account' />
+                                <Button buttonStyle={styles.signInButton} fontWeight='bold' title='Sign In' onPress={() => this.props.navigation.navigate('SignIn') }/> 
+                                
+                                <Text style={styles.terms}>By creating an account, you accept and agree to our <Text style={{textDecorationLine: 'underline'}} onPress={this._goToTermsScreen}>Terms of Use</Text></Text>
+                            </View>
+                            { this.state.loading ?
+                                
+                                <View pointerEvents='none' style={styles.loading}>
+                                    <ActivityIndicator size="large" color="#052c52" />
+                                </View>  
+
+                            : null}
+
                             
-                            <Text style={styles.terms}>By creating an account, you accept and agree to our <Text style={{textDecorationLine: 'underline'}} onPress={this._goToTermsScreen}>Terms of Use</Text></Text>
                         </View>
-                        { this.state.loading ?
-                            
-                            <View pointerEvents='none' style={styles.loading}>
-                                <ActivityIndicator size="large" color="#052c52" />
-                            </View>  
-
-                        : null}
-
                         
-                    </View>
-                    
-                </ScrollView>
+                    </ScrollView>
+                </KeyboardAvoidingView>
                 { this.state.screenLoading ?
                     
                     <View pointerEvents='none' style={styles.screenLoading}>
