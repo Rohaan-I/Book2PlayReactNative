@@ -506,11 +506,12 @@ export default class AddFacilityScreen extends React.Component {
         this.setState({ selectedFacilities });
     }
 
-
     render() {            
         return (
             <View>
-                {/* <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={30} > */}
+                <KeyboardAvoidingView 
+                behavior='padding'
+                keyboardVerticalOffset={100}>
                     <ScrollView contentContainerStyle={styles.contentContainer}>
                         <View style={styles.container}>
                             <Image
@@ -567,6 +568,7 @@ export default class AddFacilityScreen extends React.Component {
                                 value={this.state.phone} 
                                 ref={(input) => { this.phoneInput = input; }}
                                 onSubmitEditing={() => { this.widthInput.focus(); }}
+                                
                                 />
                                 {!this.state.hasPhone ? <FormValidationMessage>{'Contact Number is required'}</FormValidationMessage> : null } 
                                 
@@ -623,6 +625,18 @@ export default class AddFacilityScreen extends React.Component {
                                     {this.state.sports.map(sport => <Picker.Item key={sport._id} label={sport.name} value={sport._id} /> )}
                                 </Picker>
                                 
+                                <FormInput multiline={true} 
+                                numberOfLines={4} 
+                                autoCapitalize='none' 
+                                placeholder='Description*' 
+                                inputStyle={styles.formInput} 
+                                onChangeText={(description) => {this.setState({ description });} }  
+                                value={this.state.description} 
+                                ref={(input) => { this.descInput = input; }}
+                                />
+                                
+                                {!this.state.hasDescription ? <FormValidationMessage>{'Description is required'}</FormValidationMessage> : null } 
+                            
                                 <FormLabel>Facilities*</FormLabel>
                                 {this.state.facilities.map(facility => 
                                     <CheckBox
@@ -648,21 +662,7 @@ export default class AddFacilityScreen extends React.Component {
                                 )}
                                 {!this.state.hasSelectedFacilities ? <FormValidationMessage>{'Facilities are required'}</FormValidationMessage> : null } 
                                 
-                                
-                                <FormInput  multiline={true} 
-                                numberOfLines={4} 
-                                autoCapitalize='none' 
-                                placeholder='Description*' 
-                                inputStyle={styles.formInput} 
-                                onChangeText={(description) => {this.setState({ description });} }  
-                                value={this.state.description} 
-                                ref={(input) => { this.descInput = input; }}
-                                />
-                                
-                                {!this.state.hasDescription ? <FormValidationMessage>{'Description is required'}</FormValidationMessage> : null } 
-                            
                                 <Button onPress={this._doAddField}  buttonStyle={styles.button} color='#052c52' fontWeight='bold' title='Add Field' />
-                                
                             </View>
                             { this.state.loading ?
                                 
@@ -675,7 +675,7 @@ export default class AddFacilityScreen extends React.Component {
                             
                         </View>
                      </ScrollView>
-                {/* </KeyboardAvoidingView> */}
+                </KeyboardAvoidingView>
                 { this.state.screenLoading ?
                     
                     <View pointerEvents='none' style={styles.screenLoading}>
@@ -737,7 +737,7 @@ const styles = StyleSheet.create({
         marginTop: 10 
     },
     contentContainer: {
-        paddingVertical: 20
+        paddingVertical: 20,
     },
     picker: { 
         width: 350, 

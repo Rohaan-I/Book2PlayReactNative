@@ -1,5 +1,7 @@
 {
   "expo": {
+    "name": "Book2Play app",
+    "description": "A court booking application.",
     "sdkVersion": "27.0.0"
   }
 }
