@@ -47,6 +47,10 @@ export default class MyFacilitiesScreen extends React.Component {
         this._sub.remove();
     }
 
+    _goToDetailsScreen = (field) => {
+        this.props.navigation.navigate('FacilityDetails', {field: field});
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -90,7 +94,9 @@ export default class MyFacilitiesScreen extends React.Component {
                                         backgroundColor='#efb225'
                                         buttonStyle={styles.detailsBtn}
                                         containerViewStyle={{width: '100%', marginLeft: 0}}
-                                        title='Details' />
+                                        title='Details' 
+                                        onPress={() => this._goToDetailsScreen(field)}
+                                        />
                                 </View>
                             </Card>);
                     })}

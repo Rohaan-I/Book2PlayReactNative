@@ -120,7 +120,13 @@ export const MyFacilitiesStack = createStackNavigator({
         navigationOptions: {
             title: 'Delete Facility'
         }
-    }   
+    },
+    FacilityDetails: {
+        screen: FacilityDetailsScreen,
+        navigationOptions: {
+            title: 'Facility Details'
+        }
+    }    
 }, 
 {
     initialRouteName: 'MyFacilities'
