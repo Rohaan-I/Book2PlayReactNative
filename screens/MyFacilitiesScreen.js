@@ -48,7 +48,7 @@ export default class MyFacilitiesScreen extends React.Component {
     }
 
     _goToDetailsScreen = (field) => {
-        this.props.navigation.navigate('FacilityDetails', {field: field});
+        this.props.navigation.navigate('FacilityDetails', {fieldId: field._id});
     }
 
     render() {

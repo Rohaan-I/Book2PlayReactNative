@@ -10,6 +10,7 @@ export default class Base {
         this._countriesUrl = this._baseUrl + 'countries';
         this._sportsUrl = this._baseUrl + 'sports';
         this._facilitiesUrl = this._baseUrl + 'facilities';
+        this._timesUrl = this._baseUrl + 'times';
     }
     
     getBaseUrl() {
@@ -54,6 +55,17 @@ export default class Base {
             let response = await fetch(this._facilitiesUrl);
             let responseJson = await response.json();
             return responseJson.facilities;
+        }
+        catch(err) {
+            throw new Error(err);
+        }
+    }
+
+    async getTimes() {
+        try {
+            let response = await fetch(this._timesUrl);
+            let responseJson = await response.json();
+            return responseJson.times;
         }
         catch(err) {
             throw new Error(err);

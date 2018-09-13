@@ -4,20 +4,18 @@ import { AsyncStorage } from 'react-native';
 
 export default class Faciity extends Base {
 
-    _addFieldUrl = '';
-    _myFieldsUrl = '';
-
+    _fieldUrl = '';
+    
     constructor() {
         super();
-        this._addFieldUrl = this.getBaseUrl() + 'fields';
-        this._myFieldsUrl = this.getBaseUrl() + 'fields/myfields/';
+        this._fieldUrl = this.getBaseUrl() + 'fields';
     }
 
     async addField(reqObject) {
         try {
             
             let token = await AsyncStorage.getItem('token');
-            let response = await fetch(this._addFieldUrl, {
+            let response = await fetch(this._fieldUrl, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -42,7 +40,7 @@ export default class Faciity extends Base {
             user = JSON.parse(user);
 
             let token = await AsyncStorage.getItem('token');
-            let response = await fetch(this._myFieldsUrl + user.id, 
+            let response = await fetch(this._fieldUrl + '/myfields/' + user.id, 
             {   
                 method: "GET",
                 headers: {
@@ -54,6 +52,31 @@ export default class Faciity extends Base {
         );
             let responseJson = await response.json();
             return responseJson.fields;
+        }
+        catch(err) {
+            console.log(err);
+            throw new Error(err);
+        }
+    }
+
+    async getFieldDetails(fieldId) {
+        try {
+            let user = await AsyncStorage.getItem('user');
+            user = JSON.parse(user);
+
+            let token = await AsyncStorage.getItem('token');
+            let response = await fetch(this._fieldUrl + '/' + fieldId, 
+            {   
+                method: "GET",
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                }
+            }
+        );
+            let responseJson = await response.json();
+            return responseJson.field;
         }
         catch(err) {
             console.log(err);
