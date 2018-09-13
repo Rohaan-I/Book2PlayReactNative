@@ -27,15 +27,16 @@ export default class FacilityDetailsScreen extends React.Component {
                 },
                 bookings: [],
                 sport: {},
-                facilities: [],    
-                totalBookingAmt: 0,
+                facilities: [],  
                 startingHourLimit: 0,
                 startingPhase: '',
                 endingHourLimit: 0,
-                endingPhase: ''
+                endingPhase: '',
+                price: 0
             },
             times: [],
-            date: dateArr[1] + '/' + dateArr[2] + '/' +dateArr[0]
+            date: dateArr[1] + '/' + dateArr[2] + '/' +dateArr[0],
+            totalChargedAmount: 0
         }
     }
 
@@ -46,11 +47,7 @@ export default class FacilityDetailsScreen extends React.Component {
         this.setState({
             field: await this._facility.getFieldDetails(this.props.navigation.getParam('fieldId'))
         });
-        // this.setState({
-        //     times: await this._facility.getTimes()
-        // });
         
-
         //setting final times 
         this.setState({
             times: this._createTimeSlot(this.state.field.bookings[0].selectedTimeRanges)
@@ -146,11 +143,28 @@ export default class FacilityDetailsScreen extends React.Component {
     }
 
     _selectTimeSlot = (time) => {
+        let isSelected = !time.isSelected;
         let newTimes = this.state.times.map(t => {return {...t}});
-        newTimes.find(nt => nt._id == time._id ).isSelected = !time.isSelected;
+        newTimes.find(nt => nt._id == time._id ).isSelected = isSelected;
         this.setState({
             times: newTimes
         });
+        
+        if(isSelected) {
+            this.setState({
+                totalChargedAmount: this.state.totalChargedAmount + this.state.field.price
+            });
+        }
+        else {
+            this.setState({
+                totalChargedAmount: this.state.totalChargedAmount - this.state.field.price
+            });
+        }
+        
+    }
+
+    _bookField = () => {
+        
     }
 
     render() {
@@ -250,9 +264,20 @@ export default class FacilityDetailsScreen extends React.Component {
                         />
 
                         {this.state.times.map(time => {
-                            return <Button key={time._id} disabled={time.isDisabled} onPress={() => this._selectTimeSlot(time)} buttonStyle={time.isSelected ? styles.clickedBtn : styles.button} color={!time.isSelected && !time.isDisabled ? '#052c52' :'#ffffff'}  fontWeight='bold' title={time.value} />
+
+                            if(time.isDisabled)
+                                return <Button key={time._id} disabled={time.isDisabled} onPress={() => this._selectTimeSlot(time)} buttonStyle={time.isSelected ? styles.clickedBtn : styles.button} color='#ffffff'  fontWeight='bold' title={time.value} />
+                            else    
+                                return <Button key={time._id} onPress={() => this._selectTimeSlot(time)} buttonStyle={time.isSelected ? styles.clickedBtn : styles.button} color={!time.isSelected ? '#ffffff' :'#052c52'}  fontWeight='bold' title={time.value} />
                         })}
                     </View>
+                    <Text style={styles.heading}>
+                        Total Charges
+                    </Text>
+                    <Text>
+                        {this.state.totalChargedAmount} AED
+                    </Text>
+                    <Button containerViewStyle={{width: '100%', marginLeft: 0}} onPress={this._bookField} buttonStyle={styles.bookNowBtn} color='#052c52'  fontWeight='bold' title='Book Now' />
                 </ScrollView>
                 { this.state.screenLoading ?
                     
@@ -314,10 +339,15 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 10,
-        backgroundColor: '#efb225'
+        backgroundColor: '#333'
     },
     clickedBtn: {
         marginTop: 10,
-        backgroundColor: '#052c52'
+        backgroundColor: '#efb225'
+    },
+    bookNowBtn: {
+        marginTop: 10,
+        marginBottom: 10,
+        backgroundColor: '#efb225'
     }
 });
