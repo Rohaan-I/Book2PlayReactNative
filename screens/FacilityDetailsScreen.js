@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Image, ActivityIndicator } from 're
 import { Card, Button, FormLabel, FormInput } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 import Facility from '../services/Facility';
+import Booking from '../services/Booking';
 
 export default class FacilityDetailsScreen extends React.Component {
 
@@ -11,6 +12,7 @@ export default class FacilityDetailsScreen extends React.Component {
     constructor(props) {
         super(props);
         this._facility = new Facility();
+        this._booking = new Booking();
         
         let date = new Date().toISOString();
         let dateStr = date.split('T')[0];
@@ -48,6 +50,20 @@ export default class FacilityDetailsScreen extends React.Component {
         //     times: await this._facility.getTimes()
         // });
         
+
+        //setting final times 
+        this.setState({
+            times: this._createTimeSlot(this.state.field.bookings[0].selectedTimeRanges)
+        });
+
+
+        this.setState({
+            screenLoading: false
+        });
+    }
+
+    _createTimeSlot = (selectedTimeRanges) => {
+
         let times = [{
             _id: 1,
             startHour: 12,
@@ -91,7 +107,6 @@ export default class FacilityDetailsScreen extends React.Component {
         //setting starting and ending limit
         let newTimes = [];
         let shouldAdd = false;
-        let selectedTimeRanges = this.state.field.bookings[0].selectedTimeRanges;
         for(let i = 0; i < times.length; i++) {
 
             if(times[i].startHour == this.state.field.startingHourLimit &&
@@ -113,6 +128,7 @@ export default class FacilityDetailsScreen extends React.Component {
 
         }
 
+        //let selectedTimeRanges = this.state.field.bookings[0].selectedTimeRanges;
         //disabling already selected time slots
         for(let i = 0; i < newTimes.length; i++) {
             for(let j = 0; j < selectedTimeRanges.length; j++) {
@@ -126,17 +142,7 @@ export default class FacilityDetailsScreen extends React.Component {
             }
         }
 
-
-        //setting final times 
-        this.setState({
-            times: newTimes
-        });
-
-
-
-        this.setState({
-            screenLoading: false
-        });
+        return newTimes;
     }
 
     _selectTimeSlot = (time) => {
@@ -209,9 +215,38 @@ export default class FacilityDetailsScreen extends React.Component {
                             dateInput: {
                                 marginLeft: 36
                             }
-                            // ... You can check the source to find the other keys.
                             }}
-                            onDateChange={(date) => {this.setState({date: date})}}
+                            onDateChange={ async (date) => {
+                                this.setState({date: date});
+                                
+                                let result = await this._booking.getFieldAllBookings();
+                                let bookings = result.bookings;
+
+                                let isMatched = false;
+                                
+                                let selectedDateStr = this.state.date;
+                                for(let i = 0; i < bookings.length; i++) {
+                                    let dateStr = bookings[i].dateAdded.split('T')[0];
+                                    let dateArr = dateStr.split('-');
+                                    let formattedDate = dateArr[1] + '/' + dateArr[2] + '/' + dateArr[0];
+
+                                    if(formattedDate == selectedDateStr && 
+                                        this.state.field.address.streetAddress.toLowerCase() == bookings[i].field.address.streetAddress.toLowerCase()){
+                                        isMatched = true;
+                                        this.setState({
+                                            times:this._createTimeSlot(bookings[i].selectedTimeRanges)
+                                        });
+                                        break;
+                                    }
+                                }
+
+                                if(!isMatched) {
+                                    this.setState({
+                                        times: this._createTimeSlot([])
+                                    });
+                                }
+                            
+                            }}
                         />
 
                         {this.state.times.map(time => {
