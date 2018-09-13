@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, ActivityIndicator, AsyncStorage } from 'react-native';
 import { Card, Button, FormLabel, FormInput } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 import Facility from '../services/Facility';
@@ -21,6 +21,7 @@ export default class FacilityDetailsScreen extends React.Component {
         this.state = {
             screenLoading: false,
             field: {
+                title: '',
                 address: {
                     city: {},
                     country: {}
@@ -36,7 +37,8 @@ export default class FacilityDetailsScreen extends React.Component {
             },
             times: [],
             date: dateArr[1] + '/' + dateArr[2] + '/' +dateArr[0],
-            totalChargedAmount: 0
+            totalChargedAmount: 0,
+            selectedTimeRanges: []
         }
     }
 
@@ -160,11 +162,38 @@ export default class FacilityDetailsScreen extends React.Component {
                 totalChargedAmount: this.state.totalChargedAmount - this.state.field.price
             });
         }
+
+        //formatting the time object
+        time.id = time._id;
+        delete time._id;
+
+        time.startPhase = time.startPhase.toLowerCase();
+        time.endPhase = time.endPhase.toLowerCase();
+        
+        this.setState({
+            selectedTimeRanges: [...this.state.selectedTimeRanges, time]
+        });
         
     }
 
-    _bookField = () => {
-        
+    _bookField = async () => {
+        let user = await AsyncStorage.getItem('user');
+        user = JSON.parse(user);
+
+        let reqObject = {
+            bookedByUser: user.id,
+            date: this.state.date,
+            field: this.state.field._id,
+            fieldManager: this.state.field.fieldManager._id,
+            selectedTimeRanges: this.state.selectedTimeRanges,
+            times: [],
+            totalCharges: this.state.totalChargedAmount
+        };
+
+        console.log(reqObject);
+
+        let response = await this._booking.doBookField(reqObject);
+        console.log(response);
     }
 
     render() {
