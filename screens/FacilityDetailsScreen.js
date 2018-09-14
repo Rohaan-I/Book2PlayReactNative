@@ -33,12 +33,16 @@ export default class FacilityDetailsScreen extends React.Component {
                 startingPhase: '',
                 endingHourLimit: 0,
                 endingPhase: '',
-                price: 0
+                price: 0,
+                fieldSize: {},
+                description: ''
             },
             times: [],
             date: dateArr[1] + '/' + dateArr[2] + '/' +dateArr[0],
             totalChargedAmount: 0,
-            selectedTimeRanges: []
+            selectedTimeRanges: [],
+            loading: false,
+            disableBookNow: true
         }
     }
 
@@ -56,12 +60,19 @@ export default class FacilityDetailsScreen extends React.Component {
         for(let i = 0; i < bookings.length; i++) {
             selectedTimeRanges = selectedTimeRanges.concat(bookings[i].selectedTimeRanges);
         }
-
-
         this.setState({
             times: this._createTimeSlot(selectedTimeRanges)
         });
 
+        //should book now button disabled or not
+        let times = this.state.times;
+        for(let i = 0; i < times.length; i++) {
+            if(!times[i].isDisabled) {
+                this.setState({
+                    disableBookNow: false
+                });
+            }
+        }
 
         this.setState({
             screenLoading: false
@@ -134,7 +145,6 @@ export default class FacilityDetailsScreen extends React.Component {
 
         }
 
-        //let selectedTimeRanges = this.state.field.bookings[0].selectedTimeRanges;
         //disabling already selected time slots
         for(let i = 0; i < newTimes.length; i++) {
             for(let j = 0; j < selectedTimeRanges.length; j++) {
@@ -186,6 +196,10 @@ export default class FacilityDetailsScreen extends React.Component {
     _bookField = async () => {
         let user = await AsyncStorage.getItem('user');
         user = JSON.parse(user);
+        
+        this.setState({
+            loading: true
+        });
 
         let reqObject = {
             bookedByUser: user.id,
@@ -201,10 +215,16 @@ export default class FacilityDetailsScreen extends React.Component {
 
         let response = await this._booking.doBookField(reqObject);
         console.log(response);
+
+        this.setState({
+            loading: false
+        });
     }
 
     render() {
         const { field } = this.state;
+        console.log(field);
+
         return (
             <View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -220,6 +240,18 @@ export default class FacilityDetailsScreen extends React.Component {
                     </Text>
                     <Text>
                         {field.address.country.country}
+                    </Text>
+                    <Text style={styles.heading}>
+                        Size
+                    </Text>
+                    <Text>
+                        {field.fieldSize.width} X {field.fieldSize.length} 
+                    </Text>
+                    <Text style={styles.heading}>
+                        Price
+                    </Text>
+                    <Text>
+                        AED {field.price} per hour
                     </Text>
                     <Text style={styles.heading}>
                         Sport
@@ -240,6 +272,12 @@ export default class FacilityDetailsScreen extends React.Component {
                             </Text>
                         )}
                     </View>
+                    <Text style={styles.heading}>
+                        Description
+                    </Text>
+                    <Text>
+                        {field.description}
+                    </Text>
                     <Text style={styles.heading}>
                         Bookings
                     </Text>
@@ -313,7 +351,14 @@ export default class FacilityDetailsScreen extends React.Component {
                     <Text>
                         {this.state.totalChargedAmount} AED
                     </Text>
-                    <Button containerViewStyle={{width: '100%', marginLeft: 0}} onPress={this._bookField} buttonStyle={styles.bookNowBtn} color='#052c52'  fontWeight='bold' title='Book Now' />
+                    <Button disabled={this.state.disableBookNow} containerViewStyle={{width: '100%', marginLeft: 0}} onPress={this._bookField} buttonStyle={styles.bookNowBtn} color={ !this.state.disableBookNow ? '#052c52': '#ffffff' }  fontWeight='bold' title='Book Now' />
+                   
+                    { this.state.loading ?
+                        <View pointerEvents='none' style={styles.loading}>
+                            <ActivityIndicator size="large" color="#052c52" />
+                        </View>  
+
+                    : null}
                 </ScrollView>
                 { this.state.screenLoading ?
                     
@@ -385,5 +430,15 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
         backgroundColor: '#efb225'
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        backgroundColor: '#f5fcff88'
     }
 });

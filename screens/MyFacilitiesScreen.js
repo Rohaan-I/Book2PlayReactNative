@@ -71,6 +71,18 @@ export default class MyFacilitiesScreen extends React.Component {
                                     {field.address.country.country}
                                 </Text>
                                 <Text style={styles.heading}>
+                                    Size
+                                </Text>
+                                <Text>
+                                    {field.fieldSize.width} X {field.fieldSize.length} 
+                                </Text>
+                                <Text style={styles.heading}>
+                                    Price
+                                </Text>
+                                <Text>
+                                    AED {field.price} / hr
+                                </Text>
+                                <Text style={styles.heading}>
                                     Sport
                                 </Text>
                                 <Text>
