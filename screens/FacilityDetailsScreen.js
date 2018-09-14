@@ -14,9 +14,9 @@ export default class FacilityDetailsScreen extends React.Component {
         this._facility = new Facility();
         this._booking = new Booking();
         
-        let date = new Date().toISOString();
-        let dateStr = date.split('T')[0];
-        let dateArr = dateStr.split('-');
+        //let date = new Date().toISOString();
+        // let dateStr = date.split('T')[0];
+        // let dateArr = dateStr.split('-');
 
         this.state = {
             screenLoading: false,
@@ -38,7 +38,8 @@ export default class FacilityDetailsScreen extends React.Component {
                 description: ''
             },
             times: [],
-            date: dateArr[1] + '/' + dateArr[2] + '/' +dateArr[0],
+            //date: dateArr[1] + '/' + dateArr[2] + '/' +dateArr[0],
+            date: new Date().toLocaleDateString(),
             totalChargedAmount: 0,
             selectedTimeRanges: [],
             loading: false,
@@ -61,13 +62,17 @@ export default class FacilityDetailsScreen extends React.Component {
         });
         
         //setting final times 
-        let selectedTimeRanges = [];
-        let bookings = this.state.field.bookings;
-        for(let i = 0; i < bookings.length; i++) {
-            selectedTimeRanges = selectedTimeRanges.concat(bookings[i].selectedTimeRanges);
-        }
+        // let selectedTimeRanges = [];
+        // let bookings = this.state.field.bookings;
+        // for(let i = 0; i < bookings.length; i++) {
+        //     selectedTimeRanges = selectedTimeRanges.concat(bookings[i].selectedTimeRanges);
+        // }
+        // this.setState({
+        //     times: this._createTimeSlot(selectedTimeRanges)
+        // });
+        
         this.setState({
-            times: this._createTimeSlot(selectedTimeRanges)
+            times: this._setBookingSlotsByDate(this.state.field.bookings, this.state.date) 
         });
 
         //should book now button disabled or not
@@ -199,6 +204,34 @@ export default class FacilityDetailsScreen extends React.Component {
         
     }
 
+    _setBookingSlotsByDate(bookings, date) {
+        let isMatched = false;
+                               
+        let selectedDateStr = date;
+        let selectedTimeRanges = [];
+        for(let i = 0; i < bookings.length; i++) {
+            let dateStr = bookings[i].date.split('T')[0];
+            let dateArr = dateStr.split('-');
+            let formattedDate = dateArr[1] + '/' + dateArr[2] + '/' + dateArr[0];
+
+            if(formattedDate == selectedDateStr && 
+                this.state.field.address.streetAddress.toLowerCase() == bookings[i].field.address.streetAddress.toLowerCase()){
+                isMatched = true;
+                selectedTimeRanges = selectedTimeRanges.concat(bookings[i].selectedTimeRanges);
+            }
+        }
+
+        
+        if(!isMatched) {
+            //this.setState({
+                return this._createTimeSlot([]);
+            //});
+        }
+        else {
+            return this._createTimeSlot(selectedTimeRanges);
+        }
+    }
+
     _bookField = async () => {
         let user = await AsyncStorage.getItem('user');
         user = JSON.parse(user);
@@ -316,29 +349,33 @@ export default class FacilityDetailsScreen extends React.Component {
                                 let result = await this._booking.getFieldAllBookings();
                                 let bookings = result.bookings;
 
-                                let isMatched = false;
+                                // let isMatched = false;
                                 
-                                let selectedDateStr = this.state.date;
-                                for(let i = 0; i < bookings.length; i++) {
-                                    let dateStr = bookings[i].dateAdded.split('T')[0];
-                                    let dateArr = dateStr.split('-');
-                                    let formattedDate = dateArr[1] + '/' + dateArr[2] + '/' + dateArr[0];
+                                // let selectedDateStr = this.state.date;
+                                // for(let i = 0; i < bookings.length; i++) {
+                                //     let dateStr = bookings[i].date.split('T')[0];
+                                //     let dateArr = dateStr.split('-');
+                                //     let formattedDate = dateArr[1] + '/' + dateArr[2] + '/' + dateArr[0];
 
-                                    if(formattedDate == selectedDateStr && 
-                                        this.state.field.address.streetAddress.toLowerCase() == bookings[i].field.address.streetAddress.toLowerCase()){
-                                        isMatched = true;
-                                        this.setState({
-                                            times:this._createTimeSlot(bookings[i].selectedTimeRanges)
-                                        });
-                                        break;
-                                    }
-                                }
+                                //     if(formattedDate == selectedDateStr && 
+                                //         this.state.field.address.streetAddress.toLowerCase() == bookings[i].field.address.streetAddress.toLowerCase()){
+                                //         isMatched = true;
+                                //         this.setState({
+                                //             times:this._createTimeSlot(bookings[i].selectedTimeRanges)
+                                //         });
+                                //         break;
+                                //     }
+                                // }
 
-                                if(!isMatched) {
-                                    this.setState({
-                                        times: this._createTimeSlot([])
-                                    });
-                                }
+                                // if(!isMatched) {
+                                //     this.setState({
+                                //         times: this._createTimeSlot([])
+                                //     });
+                                // }
+
+                                this.setState({
+                                    times: this._setBookingSlotsByDate(bookings, this.state.date)
+                                });
                             
                             }}
                         />
