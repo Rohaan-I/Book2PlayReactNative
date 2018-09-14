@@ -54,9 +54,6 @@ export default class UpcomingScreen extends React.Component {
                     upcomingBookings: upcomingBookings
                 });
 
-                console.log('upcoming bookings ===============================>>');
-                console.log(this.state.upcomingBookings);
-        
                 this.setState({
                     screenLoading: false
                 });
@@ -68,13 +65,65 @@ export default class UpcomingScreen extends React.Component {
         this._sub.remove();
     }
 
+    _goToDetailsScreen = (booking) => {
+        this.props.navigation.navigate('BookingDetails', {booking: booking});
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
-                    <Text>
-                        Upcoming Bookings
-                    </Text>
+                {this.state.upcomingBookings.map(booking => {
+                        
+                    return (<Card
+                        key={booking._id}
+                        title={booking.field.title}
+                        image={require('../assets/images/logo_field.png')}>
+                            <Text style={styles.firstHeading}>
+                                Date
+                            </Text>
+                            <Text>
+                                {new Date(booking.date).toDateString()}
+                            </Text>
+                            <Text style={styles.heading}>
+                                Time Slots
+                            </Text>
+                            <View>
+                                {booking.selectedTimeRanges.map(str => {
+                                    return (<Text key={str.id}>
+                                        {str.startHour + ':00'} {str.startPhase.toUpperCase()} - {str.endHour + ':00'} {str.endPhase.toUpperCase()}
+                                    </Text>);
+                                })} 
+                            </View>
+                            <Text style={styles.heading}>
+                                Charges
+                            </Text>
+                            <Text>
+                                AED {booking.totalCharges}
+                            </Text>
+                            <Text style={styles.heading}>
+                                Customer
+                            </Text>
+                            <Text>
+                                {booking.bookedByUser.name}
+                            </Text>
+                            <Text style={styles.heading}>
+                                Contact Number
+                            </Text>
+                            <Text>
+                                {booking.bookedByUser.contactNumber}
+                            </Text>
+                            <View>
+                                <Button
+                                    backgroundColor='#efb225'
+                                    buttonStyle={styles.detailsBtn}
+                                    containerViewStyle={{width: '100%', marginLeft: 0}}
+                                    title='Details' 
+                                    onPress={() => this._goToDetailsScreen(booking)}
+                                    />
+                            </View>
+                        </Card>);
+                    })}
                 </ScrollView>
                 { this.state.screenLoading ?
                     
@@ -93,11 +142,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     contentContainer: {
-        paddingVertical: 20,
-        paddingHorizontal: 20,
-        flex: 1, 
-        alignItems: 'center', 
-        justifyContent: 'center'
+        paddingVertical: 5
     },
     screenLoading: {
         position: 'absolute',
@@ -108,5 +153,29 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#ffffff'
+    },
+    firstHeading: {
+        fontSize: 16, 
+        color: '#052c52', 
+        fontWeight: 'bold'
+    },
+    heading: {
+        marginTop: 10, 
+        fontSize: 16, 
+        color: '#052c52', 
+        fontWeight: 'bold'
+    },
+    chipsContainer: {
+        marginBottom: 10, 
+        flex: 1, 
+        flexDirection: 'row', 
+        flexWrap: 'wrap'
+    },
+    detailsBtn: {
+        borderRadius: 0, 
+        marginLeft: 0, 
+        marginRight: 0, 
+        marginBottom: 0,
+        marginTop: 10
     }
 });
