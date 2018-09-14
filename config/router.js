@@ -123,9 +123,9 @@ export const MyFacilitiesStack = createStackNavigator({
     },
     FacilityDetails: {
         screen: FacilityDetailsScreen,
-        navigationOptions: {
-            title: 'Facility Details'
-        }
+        // navigationOptions: {
+        //     title: 'Facility Details'
+        // }
     }    
 }, 
 {

@@ -6,7 +6,7 @@ import Facility from '../services/Facility';
 import Booking from '../services/Booking';
 
 export default class FacilityDetailsScreen extends React.Component {
-
+    
     _facility = null;
     
     constructor(props) {
@@ -45,6 +45,12 @@ export default class FacilityDetailsScreen extends React.Component {
             disableBookNow: true
         }
     }
+
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: navigation.getParam('title')
+        }
+    };
 
     async componentDidMount() {
         this.setState({
