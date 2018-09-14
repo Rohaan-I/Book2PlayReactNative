@@ -2,6 +2,7 @@ import React from 'react';
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
 import { Button } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation';
+import { createMaterialTopTabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import SignInScreen from '../screens/SignInScreen';
@@ -22,6 +23,9 @@ import NotificationsScreen from '../screens/NotificationsScreen';
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import GetStartedScreen from '../screens/GetStartedScreen';
+import UpcomingScreen from '../screens/UpcomingScreen';
+import PreviousScreen from '../screens/PreviousScreen';
+import CancelledScreen from '../screens/CancelledScreen';
 
 
 export const AuthStack = createStackNavigator({
@@ -78,9 +82,46 @@ export const FacilitiesStack = createStackNavigator({
     initialRouteName: 'Facilities'
 });
 
+
+export const BookingsTopTab = createMaterialTopTabNavigator({
+    Upcoming: {
+        screen:  UpcomingScreen,
+        navigationOptions: {
+            title: 'Upcoming'
+        }
+    },
+    Previous: {
+        screen: PreviousScreen,
+        navigationOptions: {
+            title: 'Previous'
+        }
+    },
+    Cancelled: {
+        screen: CancelledScreen,
+        navigationOptions: {
+            title: 'Cancelled'
+        }
+    } 
+}, 
+{
+    initialRouteName: 'Upcoming',
+    tabBarOptions: {
+        labelStyle: {
+            color: '#052c52',
+            fontWeight: 'bold'
+        },
+        indicatorStyle : {
+           backgroundColor: '#052c52'
+        },
+        style: {
+            backgroundColor: 'white',
+        }
+    }
+});
+
 export const BookingsStack = createStackNavigator({
     Bookings: {
-        screen:  BookingsScreen,
+        screen:  BookingsTopTab,
         navigationOptions: {
             title: 'Bookings'
         }
