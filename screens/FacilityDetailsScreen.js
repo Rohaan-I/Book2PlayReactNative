@@ -51,8 +51,15 @@ export default class FacilityDetailsScreen extends React.Component {
         });
         
         //setting final times 
+        let selectedTimeRanges = [];
+        let bookings = this.state.field.bookings;
+        for(let i = 0; i < bookings.length; i++) {
+            selectedTimeRanges = selectedTimeRanges.concat(bookings[i].selectedTimeRanges);
+        }
+
+
         this.setState({
-            times: this._createTimeSlot(this.state.field.bookings[0].selectedTimeRanges)
+            times: this._createTimeSlot(selectedTimeRanges)
         });
 
 
@@ -64,7 +71,7 @@ export default class FacilityDetailsScreen extends React.Component {
     _createTimeSlot = (selectedTimeRanges) => {
 
         let times = [{
-            _id: 1,
+            id: 1,
             startHour: 12,
             endHour: 1,
             value: '12:00 AM' + ' - ' + '1:00 AM',
@@ -86,7 +93,7 @@ export default class FacilityDetailsScreen extends React.Component {
                     endPhase = 'AM';
         
                 times.push({
-                    _id: id,
+                    id,
                     startHour: j,
                     endHour: j + 1,
                     value: j + ':00 ' +startPhase+ ' - ' + (j + 1) + ':00 ' + endPhase,
@@ -147,7 +154,7 @@ export default class FacilityDetailsScreen extends React.Component {
     _selectTimeSlot = (time) => {
         let isSelected = !time.isSelected;
         let newTimes = this.state.times.map(t => {return {...t}});
-        newTimes.find(nt => nt._id == time._id ).isSelected = isSelected;
+        newTimes.find(nt => nt.id == time.id ).isSelected = isSelected;
         this.setState({
             times: newTimes
         });
@@ -164,8 +171,8 @@ export default class FacilityDetailsScreen extends React.Component {
         }
 
         //formatting the time object
-        time.id = time._id;
-        delete time._id;
+        //time.id = time._id;
+        //delete time._id;
 
         time.startPhase = time.startPhase.toLowerCase();
         time.endPhase = time.endPhase.toLowerCase();
@@ -295,9 +302,9 @@ export default class FacilityDetailsScreen extends React.Component {
                         {this.state.times.map(time => {
 
                             if(time.isDisabled)
-                                return <Button key={time._id} disabled={time.isDisabled} onPress={() => this._selectTimeSlot(time)} buttonStyle={time.isSelected ? styles.clickedBtn : styles.button} color='#ffffff'  fontWeight='bold' title={time.value} />
+                                return <Button key={time.id} disabled={time.isDisabled} onPress={() => this._selectTimeSlot(time)} buttonStyle={time.isSelected ? styles.clickedBtn : styles.button} color='#ffffff'  fontWeight='bold' title={time.value} />
                             else    
-                                return <Button key={time._id} onPress={() => this._selectTimeSlot(time)} buttonStyle={time.isSelected ? styles.clickedBtn : styles.button} color={!time.isSelected ? '#ffffff' :'#052c52'}  fontWeight='bold' title={time.value} />
+                                return <Button key={time.id} onPress={() => this._selectTimeSlot(time)} buttonStyle={time.isSelected ? styles.clickedBtn : styles.button} color={!time.isSelected ? '#ffffff' :'#052c52'}  fontWeight='bold' title={time.value} />
                         })}
                     </View>
                     <Text style={styles.heading}>
