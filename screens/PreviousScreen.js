@@ -45,7 +45,7 @@ export default class PreviousScreen extends React.Component {
                     let date = new Date(bookings[i].date);
                     date = date.getTime();
 
-                    if(currDate > date) {
+                    if(currDate > date && bookings[i].status.toLowerCase() != 'rejected') {
                         previousBookings.push(bookings[i]);
                     }
                 }

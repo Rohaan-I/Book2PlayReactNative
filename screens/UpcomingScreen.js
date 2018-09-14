@@ -45,7 +45,7 @@ export default class UpcomingScreen extends React.Component {
                     let date = new Date(bookings[i].date);
                     date = date.getTime();
 
-                    if(currDate < date) {
+                    if(currDate < date && bookings[i].status.toLowerCase() != 'rejected') {
                         upcomingBookings.push(bookings[i]);
                     }
                 }
