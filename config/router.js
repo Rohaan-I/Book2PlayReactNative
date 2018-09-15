@@ -128,9 +128,9 @@ export const BookingsStack = createStackNavigator({
     },
     BookingDetails: {
         screen: BookingDetailsScreen,
-        navigationOptions: {
-            title: 'Booking Details'
-        }
+        // navigationOptions: {
+        //     title: 'Booking Details'
+        // }
     } 
 }, 
 {

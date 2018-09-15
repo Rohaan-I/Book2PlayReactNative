@@ -66,7 +66,7 @@ export default class UpcomingScreen extends React.Component {
     }
 
     _goToDetailsScreen = (booking) => {
-        this.props.navigation.navigate('BookingDetails', {booking: booking});
+        this.props.navigation.navigate('BookingDetails', {booking: booking, title: booking.field.title});
     }
 
     render() {

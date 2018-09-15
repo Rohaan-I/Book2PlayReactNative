@@ -8,7 +8,7 @@ import Booking from '../services/Booking';
 export default class FacilityDetailsScreen extends React.Component {
     
     _facility = null;
-    
+    _booking = null;
     constructor(props) {
         super(props);
         this._facility = new Facility();
@@ -258,6 +258,8 @@ export default class FacilityDetailsScreen extends React.Component {
         this.setState({
             loading: false
         });
+
+        this.props.navigation.navigate('Bookings');
     }
 
     render() {
