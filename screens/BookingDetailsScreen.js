@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, ActivityIndicator, AsyncStorage, KeyboardAvoidingView } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image, ActivityIndicator, AsyncStorage, KeyboardAvoidingView, Alert } from 'react-native';
 import { Card, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 import Facility from '../services/Facility';
@@ -12,7 +12,7 @@ export default class BookingDetailsScreen extends React.Component {
     constructor(props) {
         super(props);
         // this._facility = new Facility();
-        // this._booking = new Booking();
+        this._booking = new Booking();
         
         this.state = {
         //     screenLoading: false,
@@ -230,7 +230,7 @@ export default class BookingDetailsScreen extends React.Component {
     //     }
     // }
 
-    _bookField = async () => {
+    _acceptBooking = async () => {
         let user = await AsyncStorage.getItem('user');
         user = JSON.parse(user);
         
@@ -239,25 +239,123 @@ export default class BookingDetailsScreen extends React.Component {
         });
 
         let reqObject = {
-            bookedByUser: user.id,
-            date: this.state.date,
-            field: this.state.field._id,
-            fieldManager: this.state.field.fieldManager._id,
-            selectedTimeRanges: this.state.selectedTimeRanges,
-            times: [],
-            totalCharges: this.state.totalChargedAmount
+            id: this.props.navigation.getParam('booking')._id,
+            status: 'accepted',
+            statusUpdateComments: 'Booking request is accepted.',
+            statusUpdatedBy: user.id
         };
 
         console.log(reqObject);
 
-        let response = await this._booking.doBookField(reqObject);
+        let response = await this._booking.updateBookingStatus(reqObject);
         console.log(response);
 
-        this.setState({
-            loading: false
-        });
+        if(!response.success) {
+            this.setState({
+                loading: false
+            });
 
-        this.props.navigation.navigate('Bookings');
+            Alert.alert(
+                'Error',
+                response.message,
+                [
+                  {text: 'OK'}
+                ],
+                { cancelable: false }
+              );
+        }
+        else {
+            response = await this._booking.updateBooking(this.props.navigation.getParam('booking')._id);
+            console.log(response);
+
+            this.setState({
+                loading: false
+            });
+            
+            if(!response.success) {
+                
+                Alert.alert(
+                    'Error',
+                    response.message,
+                    [
+                      {text: 'OK'}
+                    ],
+                    { cancelable: false }
+                  );
+            }
+            else {
+                this.props.navigation.navigate('Bookings');
+            }
+        }
+    }
+
+    _rejectBooking = async () => {
+
+
+        if(this.state.rejectionReason == '') {
+            this.setState({
+                hasRejectionReason: false
+            });
+        }
+        else {
+            let user = await AsyncStorage.getItem('user');
+            user = JSON.parse(user);
+            
+            this.setState({
+                loading: true
+            });
+
+            let reqObject = {
+                id: this.props.navigation.getParam('booking')._id,
+                status: 'rejected',
+                statusUpdateComments: this.state.rejectionReason,
+                statusUpdatedBy: user.id
+            };
+
+            console.log(reqObject);
+
+            let response = await this._booking.updateBookingStatus(reqObject);
+            console.log(response);
+
+            if(!response.success) {
+                this.setState({
+                    loading: false
+                });
+
+                Alert.alert(
+                    'Error',
+                    response.message,
+                    [
+                    {text: 'OK'}
+                    ],
+                    { cancelable: false }
+                );
+            }
+            else {
+                response = await this._booking.updateBooking(this.props.navigation.getParam('booking')._id);
+                console.log(response);
+
+                this.setState({
+                    loading: false
+                });
+                
+                if(!response.success) {
+                    
+                    Alert.alert(
+                        'Error',
+                        response.message,
+                        [
+                        {text: 'OK'}
+                        ],
+                        { cancelable: false }
+                    );
+                }
+                else {
+                    this.props.navigation.navigate('Bookings');
+                }
+            }
+        }
+        
     }
 
     render() {
@@ -316,27 +414,73 @@ export default class BookingDetailsScreen extends React.Component {
                         <Text style={styles.heading}>
                             Status
                         </Text>
-                        <Text style={booking.status.toLowerCase() == 'rejected' ? styles.rejectedStatus : styles.approvedStatus}>
-                            {booking.status}
-                        </Text>
+                        {booking.status.toLowerCase() == 'rejected' ?
+                            <Text style={styles.rejectedStatus}>
+                                {booking.status}
+                            </Text>
+                        :null}
+                        {booking.status.toLowerCase() == 'approved' ?
+                            <Text style={styles.approvedStatus}>
+                                {booking.status}
+                            </Text>
+                        :null}
+                        {booking.status.toLowerCase() == 'pending' ?
+                            <Text style={styles.approvedStatus}>
+                                {booking.status}
+                            </Text>
+                        :null}
+                        {booking.status.toLowerCase() == 'accepted' ?
+                            <Text style={styles.acceptedStatus}>
+                                {booking.status}
+                            </Text>
+                        :null}
+
+                        {booking.status.toLowerCase() == 'approved' ? 
                         <Button
-                            disabled={booking.status.toLowerCase() == 'approved' ? true : false}
+                            disabled={true}
                             backgroundColor='#efb225'
                             fontWeight='bold'
-                            color={booking.status.toLowerCase() == 'approved' || booking.status.toLowerCase() == 'rejected' ? '#ffffff' : '#052c52'}
+                            color='#ffffff'
+                            buttonStyle={styles.button}
+                            containerViewStyle={{width: '100%', marginLeft: 0}}
+                            title='Approved' 
+                            onPress={this._acceptBooking}
+                            />
+                        :null}
+
+                        {booking.status.toLowerCase() == 'pending' ? 
+                        <Button
+                            disabled={false}
+                            backgroundColor='#efb225'
+                            fontWeight='bold'
+                            color='#052c52'
                             buttonStyle={styles.button}
                             containerViewStyle={{width: '100%', marginLeft: 0}}
                             title='Accept Booking' 
                             onPress={this._acceptBooking}
                             />
+                        :null}
+                        {booking.status.toLowerCase() == 'rejected' ? 
+                        <Button
+                            disabled={true}
+                            backgroundColor='#efb225'
+                            fontWeight='bold'
+                            color='#ffffff'
+                            buttonStyle={styles.button}
+                            containerViewStyle={{width: '100%', marginLeft: 0}}
+                            title='Accept Booking' 
+                            onPress={this._acceptBooking}
+                            />
+                        :null}
+                        
                         
                         {booking.status.toLowerCase() != 'rejected' ? 
                             <View>
-                                <FormInput 
+                                <FormInput  
                                     multiline={true} 
-                                    numberOfLines={4} 
+                                    numberOfLines={4}
                                     autoCapitalize='none' 
-                                    placeholder='Reject reason*' 
+                                    placeholder='Rejection reason*' 
                                     inputStyle={styles.formInput}
                                     onChangeText={(rejectionReason) => {this.setState({ rejectionReason });} }  
                                     value={this.state.rejectionReason} 
@@ -346,16 +490,29 @@ export default class BookingDetailsScreen extends React.Component {
                             </View> 
                         :null}
                         
-                        <Button
-                            disabled={booking.status.toLowerCase() != 'rejected' ? false : true}
-                            backgroundColor='#cc0000'
-                            fontWeight='bold'
-                            color='#ffffff'
-                            buttonStyle={styles.button}
-                            containerViewStyle={{width: '100%', marginLeft: 0}}
-                            title='Reject Booking'
-                            onPress={this._rejectBooking}
-                            />
+                        {booking.status.toLowerCase() != 'rejected' ?
+                            <Button
+                                disabled={false}
+                                backgroundColor='#cc0000'
+                                fontWeight='bold'
+                                color='#ffffff'
+                                buttonStyle={styles.rejectButton}
+                                containerViewStyle={{width: '100%', marginLeft: 0}}
+                                title='Reject Booking'
+                                onPress={this._rejectBooking}
+                                />
+                            :
+                            <Button
+                                disabled={true}
+                                backgroundColor='#cc0000'
+                                fontWeight='bold'
+                                color='#ffffff'
+                                buttonStyle={styles.rejectButton}
+                                containerViewStyle={{width: '100%', marginLeft: 0}}
+                                title='Reject Booking'
+                                onPress={this._rejectBooking}
+                                />
+                        }
                         
                         
                         { this.state.loading ?
@@ -439,7 +596,7 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         color: '#052c52'
     },
-    submitButton: {
+    rejectButton: {
         marginTop: 10,
         marginBottom: 10
     },
@@ -450,5 +607,10 @@ const styles = StyleSheet.create({
     rejectedStatus: {
         fontWeight: 'bold',
         color: '#cc0000'
+    },
+    acceptedStatus: {
+        fontWeight: 'bold',
+        color: '#006600'
     }
+    
 });

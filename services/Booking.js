@@ -55,4 +55,49 @@ export default class Booking extends Base {
             throw new Error(err);
         }
     }
+
+    async updateBookingStatus(reqObject) {
+        try {
+            let token = await AsyncStorage.getItem('token');
+            let response = await fetch(this._bookingUrl + '/updateStatus/' + reqObject.id, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify(reqObject),
+            });
+            let responseJSON = response.json();
+            return responseJSON;
+        }
+        catch(err) {
+            console.log(err);
+            throw new Error(err);
+        }
+    }
+
+    async updateBooking(id) {
+        try {
+            let user = await AsyncStorage.getItem('user');
+            user = JSON.parse(user);
+
+            let token = await AsyncStorage.getItem('token');
+            let response = await fetch(this._bookingUrl + '/' + id, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify(user),
+            });
+            let responseJSON = response.json();
+            return responseJSON;
+        }
+        catch(err) {
+            console.log(err);
+            throw new Error(err);
+        }
+    }
 }
