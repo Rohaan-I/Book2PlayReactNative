@@ -236,6 +236,47 @@ export const FacilityManagerTabScreen = createBottomTabNavigator(
 );
 
 
+export const UserTabScreen = createBottomTabNavigator(
+    {
+      Facilties: FacilitiesStack,
+      Bookings: BookingsStack,
+      MyAccount: {
+        screen:  MyAccountStack,
+        navigationOptions: {
+            title: 'My Account'
+        }
+      },
+      Notifications: NotificationsScreen
+    },
+    {
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused, tintColor }) => {
+          const { routeName } = navigation.state;
+          let iconName;
+          if (routeName === 'Facilties') {
+            iconName = `ios-list`;
+          } else if (routeName === 'Bookings') {
+            iconName = `ios-calendar`;
+          } else if (routeName === 'MyAccount') {
+            iconName = `ios-contact`;
+          } else if (routeName === 'Notifications') {
+            iconName = `ios-notifications-outline`;
+          }
+  
+          // You can return any component that you like here! We usually use an
+          // icon component from react-native-vector-icons
+          return <Ionicons name={iconName} size={25} color={tintColor} />;
+        },
+      }),
+      tabBarOptions: {
+        activeTintColor: '#052c52',
+        inactiveTintColor: 'gray',
+      },
+    }
+);
+
+
+
 export const PublicRootTabScreen = createBottomTabNavigator(
   {
     Facilties: FacilitiesStack,
@@ -288,9 +329,10 @@ export default MainNavigator = createSwitchNavigator(
       Welcome: WelcomeStack,
       PublicRootTab: PublicRootTabScreen,
       FacilityManagerTab: FacilityManagerTabScreen,
+      UserTab: UserTabScreen
     },
     {
       initialRouteName: 'AuthLoading',
     }
-  );
+);
   

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, AsyncStorage } from 'react-native';
 import { Card, Button, FormLabel, FormInput } from 'react-native-elements';
 
 import Booking from '../services/Booking';
@@ -30,6 +30,11 @@ export default class PreviousScreen extends React.Component {
                 this.setState({
                     bookings: result.bookings
                 });
+                
+                let user = await AsyncStorage.getItem('user');
+                this.setState({
+                    user: JSON.parse(user)
+                });
 
                 //setting upcomming bookings
                 let currDate = new Date();
@@ -45,7 +50,7 @@ export default class PreviousScreen extends React.Component {
                     let date = new Date(bookings[i].date);
                     date = date.getTime();
 
-                    if(currDate > date && bookings[i].status.toLowerCase() != 'rejected') {
+                    if(currDate > date && bookings[i].status.toLowerCase() != 'cancelled') {
                         previousBookings.push(bookings[i]);
                     }
                 }
@@ -66,65 +71,99 @@ export default class PreviousScreen extends React.Component {
     }
 
     _goToDetailsScreen = (booking) => {
-        this.props.navigation.navigate('BookingDetails', {booking: booking});
+        this.props.navigation.navigate('BookingDetails', {
+            booking: booking, 
+            title: booking.field.title,
+            user: this.state.user});
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <ScrollView contentContainerStyle={styles.contentContainer}>
-                {this.state.previousBookings.map(booking => {
-                        
-                    return (<Card
-                        key={booking._id}
-                        title={booking.field.title}
-                        image={require('../assets/images/logo_field.png')}>
-                            <Text style={styles.firstHeading}>
-                                Date
-                            </Text>
-                            <Text>
-                                {new Date(booking.date).toDateString()}
-                            </Text>
-                            <Text style={styles.heading}>
-                                Time Slots
-                            </Text>
-                            <View>
-                                {booking.selectedTimeRanges.map(str => {
-                                    return (<Text key={str.id}>
-                                        {str.id} {str.startHour + ':00'} {str.startPhase.toUpperCase()} - {str.endHour + ':00'} {str.endPhase.toUpperCase()}
-                                    </Text>);
-                                })} 
-                            </View>
-                            <Text style={styles.heading}>
-                                Charges
-                            </Text>
-                            <Text>
-                                AED {booking.totalCharges}
-                            </Text>
-                            <Text style={styles.heading}>
-                                Customer
-                            </Text>
-                            <Text>
-                                {booking.bookedByUser.name}
-                            </Text>
-                            <Text style={styles.heading}>
-                                Contact Number
-                            </Text>
-                            <Text>
-                                {booking.bookedByUser.contactNumber}
-                            </Text>
-                            <View>
-                                <Button
-                                    backgroundColor='#efb225'
-                                    buttonStyle={styles.detailsBtn}
-                                    containerViewStyle={{width: '100%', marginLeft: 0}}
-                                    title='Details' 
-                                    onPress={() => this._goToDetailsScreen(booking)}
-                                    />
-                            </View>
-                        </Card>);
-                    })}
-                </ScrollView>
+                {this.state.previousBookings.length == 0 
+                    ?
+                    <View style={styles.bookingMessage}>
+                        <Text style={styles.bookingMessageColor}> No previous bookings found </Text>
+                    </View>
+                    :
+                    <ScrollView contentContainerStyle={styles.contentContainer}>
+                    {this.state.previousBookings.map(booking => {
+                            
+                        return (<Card
+                            key={booking._id}
+                            title={booking.field.title}
+                            image={require('../assets/images/logo_field.png')}>
+                                <Text style={styles.firstHeading}>
+                                    Date
+                                </Text>
+                                <Text>
+                                    {new Date(booking.date).toDateString()}
+                                </Text>
+                                <Text style={styles.heading}>
+                                    Time Slots
+                                </Text>
+                                <View>
+                                    {booking.selectedTimeRanges.map(str => {
+                                        return (<Text key={str.id}>
+                                            {str.startHour + ':00'} {str.startPhase.toUpperCase()} - {str.endHour + ':00'} {str.endPhase.toUpperCase()}
+                                        </Text>);
+                                    })} 
+                                </View>
+                                <Text style={styles.heading}>
+                                    Charges
+                                </Text>
+                                <Text>
+                                    AED {booking.totalCharges}
+                                </Text>
+                                {this.state.user.role.toLowerCase() == 'field manager'
+                                    ?
+                                    <View>
+                                        <Text style={styles.heading}>
+                                            Customer
+                                        </Text>
+                                        <Text>
+                                            {booking.bookedByUser.name}
+                                        </Text>
+                                    </View>
+                                    :
+                                    <View>
+                                        <Text style={styles.heading}>
+                                            Field Manager
+                                        </Text>
+                                        <Text>
+                                            {booking.fieldManager.name}
+                                        </Text>
+                                    </View>
+                                }
+                                <Text style={styles.heading}>
+                                    Contact Number
+                                </Text>
+                                {this.state.user.role.toLowerCase() == 'field manager'
+                                    ?
+                                    <Text>
+                                        {booking.bookedByUser.contactNumber}
+                                    </Text>
+                                    :
+                                    <Text>
+                                        {booking.fieldManager.contactNumber}
+                                    </Text>
+                                }
+                                <Text>
+                                    {booking.bookedByUser.contactNumber}
+                                </Text>
+                                <View>
+                                    <Button
+                                        backgroundColor='#efb225'
+                                        buttonStyle={styles.detailsBtn}
+                                        containerViewStyle={{width: '100%', marginLeft: 0}}
+                                        title='Details' 
+                                        onPress={() => this._goToDetailsScreen(booking)}
+                                        />
+                                </View>
+                            </Card>);
+                        })}
+                    </ScrollView>
+                }
                 { this.state.screenLoading ?
                     
                     <View pointerEvents='none' style={styles.screenLoading}>
@@ -177,5 +216,14 @@ const styles = StyleSheet.create({
         marginRight: 0, 
         marginBottom: 0,
         marginTop: 10
+    },
+    bookingMessage: {
+        flex: 1, 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        justifyContent: 'center'
+    },
+    bookingMessageColor: {
+        color: '#052c52'
     }
 });

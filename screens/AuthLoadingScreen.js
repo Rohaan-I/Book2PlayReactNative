@@ -26,7 +26,10 @@ export default class AuthLoadingScreen extends React.Component {
     setTimeout(() => {
       if(userObject) {
           if(userObject.role == 'Field Manager') {
-              this.props.navigation.navigate('FacilityManagerTab');
+            this.props.navigation.navigate('FacilityManagerTab');
+          }
+          else {
+            this.props.navigation.navigate('UserTab');
           }
       }
       else {
