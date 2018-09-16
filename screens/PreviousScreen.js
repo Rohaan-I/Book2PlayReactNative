@@ -148,9 +148,6 @@ export default class PreviousScreen extends React.Component {
                                         {booking.fieldManager.contactNumber}
                                     </Text>
                                 }
-                                <Text>
-                                    {booking.bookedByUser.contactNumber}
-                                </Text>
                                 <View>
                                     <Button
                                         backgroundColor='#efb225'
