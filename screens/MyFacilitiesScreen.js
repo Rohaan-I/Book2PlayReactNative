@@ -4,13 +4,14 @@ import { Card, Button, FormLabel, FormInput } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Facility from '../services/Facility';
+import FAB from 'react-native-fab';
 
 export default class MyFacilitiesScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (
                 
-                <Ionicons name='ios-add-circle' style={{marginRight: 15}} size={25} color='#000' onPress={() => navigation.navigate('AddFacility')} />
+                <Ionicons name='ios-funnel' style={{marginRight: 15}} size={25} color='#000' onPress={() => navigation.navigate('Filters')} />
             )
         };
     };
@@ -28,7 +29,7 @@ export default class MyFacilitiesScreen extends React.Component {
     
     componentDidMount() {
         this._sub = this.props.navigation.addListener(
-            'didFocus',
+            'willFocus',
             async payload => {
                 this.setState({
                     screenLoading: true
@@ -120,6 +121,8 @@ export default class MyFacilitiesScreen extends React.Component {
                     </View>  
 
                 : null}
+                <FAB buttonColor="#052c52" iconTextColor="#FFFFFF" onClickAction={() => { this.props.navigation.navigate('AddFacility'); }} visible={true} iconTextComponent={    <Ionicons name='ios-add' style={{marginRight: 15}} size={25} />} />
+                
             </View>
         );
     }

@@ -26,6 +26,7 @@ import GetStartedScreen from '../screens/GetStartedScreen';
 import UpcomingScreen from '../screens/UpcomingScreen';
 import PreviousScreen from '../screens/PreviousScreen';
 import CancelledScreen from '../screens/CancelledScreen';
+import FilterScreen from '../screens/FilterScreen';
 
 
 export const AuthStack = createStackNavigator({
@@ -105,6 +106,7 @@ export const BookingsTopTab = createMaterialTopTabNavigator({
 }, 
 {
     initialRouteName: 'Upcoming',
+    swipeEnabled: false,
     tabBarOptions: {
         labelStyle: {
             color: '#052c52',
@@ -167,6 +169,12 @@ export const MyFacilitiesStack = createStackNavigator({
         // navigationOptions: {
         //     title: 'Facility Details'
         // }
+    },
+    Filters: {
+        screen: FilterScreen,
+        navigationOptions: {
+            title: 'Filters'
+        }
     }    
 }, 
 {

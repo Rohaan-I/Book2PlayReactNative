@@ -19,8 +19,9 @@ export default class PreviousScreen extends React.Component {
     }
 
     componentDidMount() {
+        console.log('inside componentDidMount ==================>>');
         this._sub = this.props.navigation.addListener(
-            'didFocus',
+            'willFocus',
             async payload => {
                 this.setState({
                     screenLoading: true

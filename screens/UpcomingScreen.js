@@ -20,7 +20,7 @@ export default class UpcomingScreen extends React.Component {
 
     componentDidMount() {
         this._sub = this.props.navigation.addListener(
-            'didFocus',
+            'willFocus',
             async payload => {
                 this.setState({
                     screenLoading: true
