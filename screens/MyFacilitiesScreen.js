@@ -28,15 +28,22 @@ export default class MyFacilitiesScreen extends React.Component {
     }
     
     componentDidMount() {
+        
         this._sub = this.props.navigation.addListener(
             'willFocus',
             async payload => {
+                
                 this.setState({
                     screenLoading: true
                 });      
                 this.setState({
                     fields: await this._facility.getMyFields()
                 });
+                //if(this.props.navigation.getParam('filterObject')) {
+                    // this.setState({
+                    //     fields: await this._facility.filterFacility(this.props.navigation.getParam('filterObject'))
+                    // });
+                //}
                 this.setState({
                     screenLoading: false
                 });

@@ -5,10 +5,12 @@ import { AsyncStorage } from 'react-native';
 export default class Faciity extends Base {
 
     _fieldUrl = '';
+    _filterUrl = '';
     
     constructor() {
         super();
         this._fieldUrl = this.getBaseUrl() + 'fields';
+        this._filterUrl = this.getBaseUrl() + 'filter';
     }
 
     async addField(reqObject) {
@@ -77,6 +79,29 @@ export default class Faciity extends Base {
         );
             let responseJson = await response.json();
             return responseJson.field;
+        }
+        catch(err) {
+            console.log(err);
+            throw new Error(err);
+        }
+    }
+
+    async filterFacility(reqObject) {
+        try {
+            
+            let token = await AsyncStorage.getItem('token');
+            let response = await fetch(this._filterUrl, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify(reqObject),
+            });
+
+            let responseJSON = response.json();
+            return responseJSON;
         }
         catch(err) {
             console.log(err);
